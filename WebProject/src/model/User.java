@@ -11,6 +11,7 @@ public class User {
 	protected String lastname;
 	protected Gender gender;
 	protected Role role;
+	private boolean deleted = false;
 	
 	public User() {}
 	
@@ -70,6 +71,14 @@ public class User {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 	
 	
