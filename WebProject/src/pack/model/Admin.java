@@ -1,7 +1,7 @@
-package model;
+package pack.model;
 
-import enums.Gender;
-import enums.Role;
+import pack.enums.Gender;
+import pack.enums.Role;
 
 public class Admin extends User{
 	

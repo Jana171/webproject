@@ -1,8 +1,8 @@
-package model;
+package pack.model;
 
 import java.time.LocalDate;
 
-import enums.ReservationStatus;
+import pack.enums.ReservationStatus;
 
 public class Reservation {
 

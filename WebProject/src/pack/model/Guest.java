@@ -1,10 +1,10 @@
-package model;
+package pack.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import enums.Gender;
-import enums.Role;
+import pack.enums.Gender;
+import pack.enums.Role;
 
 public class Guest extends User{
 	

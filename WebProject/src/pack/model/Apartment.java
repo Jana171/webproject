@@ -1,10 +1,10 @@
-package model;
+package pack.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import enums.ApartmentType;
+import pack.enums.ApartmentType;
 
 public class Apartment {
 	

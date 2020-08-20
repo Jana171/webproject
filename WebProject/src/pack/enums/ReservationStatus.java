@@ -1,4 +1,4 @@
-package enums;
+package pack.enums;
 
 public enum ReservationStatus {
 	
