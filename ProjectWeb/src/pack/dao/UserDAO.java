@@ -18,10 +18,12 @@ import pack.model.User;
 
 public class UserDAO {
 	
+	private String path;
 	private List<User> users = new ArrayList<User>();
 	
 	public UserDAO(String path) {
-		this.loadUsers(path);
+		this.path = path;
+		this.loadUsers();
 	}
 	
 	public List<User> getAllUsers() {
@@ -32,7 +34,34 @@ public class UserDAO {
 		return new User();
 	}
 	
-	public void addUser() {
+	@SuppressWarnings("unchecked")
+	public void addUser(User user) {
+		JSONParser jsonParser = new JSONParser();
+		String fullPath = path + "/res/db/users.json";
+		
+		try {
+			
+			JSONArray usersArray = (JSONArray) jsonParser.parse(new FileReader(fullPath));	
+			
+			JSONObject userJSON = new JSONObject();
+			userJSON.put("username", user.getUsername());
+			userJSON.put("password", user.getPassword());
+			userJSON.put("gender", user.getGender().toString());
+			userJSON.put("lastname", user.getLastname());
+			userJSON.put("name", user.getName());
+			userJSON.put("role", user.getRole().toString());
+			userJSON.put("deleted", false);
+			
+			users.add(user);
+			usersArray.add(userJSON);
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("Nije nasao fajl");
+			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Vrv pars exception");
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -44,15 +73,14 @@ public class UserDAO {
 		
 	}
 	
-	public void loadUsers(String path) {
+	public void loadUsers() {
 		JSONParser jsonParser = new JSONParser();
 		String fullPath = path + "/res/db/users.json";
 		
 		try {
 			
-			JSONObject usersObject = (JSONObject) jsonParser.parse(new FileReader(fullPath));	
-			JSONArray users = (JSONArray) usersObject.get("users");
-			
+			JSONArray users = (JSONArray) jsonParser.parse(new FileReader(fullPath));	
+
 			for(Object o : users) {
 				JSONObject userJSON = (JSONObject) o;
 				

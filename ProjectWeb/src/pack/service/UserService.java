@@ -21,8 +21,8 @@ public class UserService {
 		return userDAO.getUser();
 	}
 	
-	public void addUser() {
-		
+	public void addUser(User user) {
+		userDAO.addUser(user);
 	}
 	
 	public void updateUser() {
@@ -31,6 +31,19 @@ public class UserService {
 	
 	public void deleteUser() {
 		
+	}
+	
+	public boolean checkIfUserExists(User user) {
+		List<User> users = userDAO.getAllUsers();
+		boolean exists = false;
+		
+		for(User u : users) {
+			if(u.getUsername().equals(user.getUsername())) {
+				exists = true;
+			}
+		}
+		
+		return exists;
 	}
 
 }
