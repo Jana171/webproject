@@ -60,8 +60,13 @@ public class UserDAO {
 				String password = (String) userJSON.get("password");
 				String name = (String) userJSON.get("name");
 				String lastname = (String) userJSON.get("lastname");
-				Role role = (Role) userJSON.get("role");
-				Gender gender = (Gender) userJSON.get("gender");
+				
+				String roleStr = (String) userJSON.get("role");
+				Role role = Role.valueOf(roleStr);
+				
+				String genderStr = (String) userJSON.get("gender");
+				Gender gender = Gender.valueOf(genderStr);
+				
 				boolean deleted = (Boolean) userJSON.get("deleted");
 				
 				if(deleted)

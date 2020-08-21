@@ -1,26 +1,36 @@
 package pack.controller;
 
+import java.util.List;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
+import pack.model.User;
+import pack.service.UserService;
 
 @Path("/users")
 public class UserController {
-	
-	/*@Context
+
+	@Context
 	HttpServletRequest request;
 	@Context
 	ServletContext ctx;
-	*/
+	
+	
+	
 	@GET
+	@Path("/hello")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String test() {
-		System.out.println("USAO");
-		return "mmm";
+	public String helloWorld() {
+		return "Hello World!";
 	}
 	
-	/*@GET
+	@GET
 	@Path("/all")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<User> getAllUsers() {
@@ -38,5 +48,4 @@ public class UserController {
 		
 		return userService;
 	}
-*/
 }
