@@ -1,0 +1,16 @@
+body {
+	background-image: url("../res/img/bg.jpg");
+}
+
+form {
+	max-width: 50%;
+}
+
+label {
+	background-color: white;
+	
+}
+
+input {
+	max-width: 300px;
+}

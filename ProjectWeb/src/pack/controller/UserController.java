@@ -12,14 +12,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import pack.dto.LoginDTO;
 import pack.model.User;
 import pack.service.UserService;
 
 @Path("/users")
 public class UserController {
 
-	@Context
-	HttpServletRequest request;
+	//@Context
+	//HttpServletRequest request;
 	@Context
 	ServletContext ctx;
 	
@@ -44,12 +45,49 @@ public class UserController {
 	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String register(User user) {
-		System.out.println("USAO");
 		UserService userService = getUserService();
-		if(userService.checkIfUserExists(user))
+		System.out.println(userService.checkIfUserExists(user));
+		if(!userService.checkIfUserExists(user))
 			userService.addUser(user);
 		
 		return "Successfull!";
+	}
+	
+	@POST
+	@Path("/login")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public User login(LoginDTO loginDTO, @Context HttpServletRequest request) {
+		UserService userService = getUserService();
+		User user = userService.getUser(loginDTO.getUsername());
+		
+		if(user != null && user.getPassword().equals(loginDTO.getPassword())) {
+			request.getSession().setAttribute("user",user);
+			return user;
+		} else {
+			return null;
+		}
+		
+	}
+	
+	@POST
+	@Path("/logout")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String logout(@Context HttpServletRequest request) {
+		request.getSession().setAttribute("user",null);
+		
+		return "Successfull!";
+	}
+	
+	@GET
+	@Path("/check")
+	public void check(@Context  HttpServletRequest request) {
+
+		User user = (User) request.getSession().getAttribute("user");
+		if(user == null)
+			System.out.println("NULL");
+		else
+			System.out.println(user.getUsername());
 	}
 	
 	private UserService getUserService() {	

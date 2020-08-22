@@ -2,6 +2,7 @@ package pack.dao;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +31,16 @@ public class UserDAO {
 		return users;
 	}
 	
-	public User getUser() {
-		return new User();
+	public User getUser(String username) {
+		User user = null;
+		
+		for(User u : users) {
+			if(u.getUsername().equals(username)) {
+				user = u;
+			}
+		}
+		
+		return user;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -54,6 +63,10 @@ public class UserDAO {
 			
 			users.add(user);
 			usersArray.add(userJSON);
+			System.out.println(fullPath);
+			FileWriter file = new FileWriter(fullPath);
+            file.write(usersArray.toJSONString());
+            file.close();
 			
 		} catch (FileNotFoundException e) {
 			System.out.println("Nije nasao fajl");
@@ -76,7 +89,7 @@ public class UserDAO {
 	public void loadUsers() {
 		JSONParser jsonParser = new JSONParser();
 		String fullPath = path + "/res/db/users.json";
-		
+		System.out.println(fullPath);
 		try {
 			
 			JSONArray users = (JSONArray) jsonParser.parse(new FileReader(fullPath));	

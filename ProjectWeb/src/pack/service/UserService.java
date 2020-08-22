@@ -17,8 +17,8 @@ public class UserService {
 		return userDAO.getAllUsers();
 	}
 	
-	public User getUser() {
-		return userDAO.getUser();
+	public User getUser(String username) {
+		return userDAO.getUser(username);
 	}
 	
 	public void addUser(User user) {
@@ -34,16 +34,13 @@ public class UserService {
 	}
 	
 	public boolean checkIfUserExists(User user) {
-		List<User> users = userDAO.getAllUsers();
-		boolean exists = false;
+		User u = userDAO.getUser(user.getUsername());
+
+		if(u == null)
+			return false;
+		else
+			return true;
 		
-		for(User u : users) {
-			if(u.getUsername().equals(user.getUsername())) {
-				exists = true;
-			}
-		}
-		
-		return exists;
 	}
 
 }
