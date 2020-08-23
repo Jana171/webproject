@@ -1,0 +1,11 @@
+[
+	{
+		"apartmentId":1,
+		"startDate":"2020-08-26",
+		"numberOfOvernightsStay":1,
+		"totalPrice":50,
+		"messageWhenBooking":"No message",
+		"guest":"BoskoTheCat",
+		"status":"CREATED"
+	}
+]
