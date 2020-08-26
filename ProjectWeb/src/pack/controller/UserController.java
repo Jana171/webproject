@@ -33,6 +33,9 @@ public class UserController {
 		return "Hello World!";
 	}
 	
+	
+
+	
 	@GET
 	@Path("/all")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -100,4 +103,6 @@ public class UserController {
 		
 		return userService;
 	}
+	
+	
 }

@@ -22,8 +22,14 @@ public class UserDAO {
 	private String path;
 	private List<User> users = new ArrayList<User>();
 	
+	private ApartmentDAO apartmentDAO;
+	private ReservationDAO reservationDAO;
+	
 	public UserDAO(String path) {
 		this.path = path;
+		this.apartmentDAO = new ApartmentDAO(path);
+		this.reservationDAO = new ReservationDAO(path);
+		
 		this.loadUsers();
 	}
 	

@@ -8,7 +8,7 @@ import pack.enums.ApartmentType;
 
 public class Apartment {
 	
-	private Long id;
+	private int id;
 	private String name;
 	private ApartmentType type;
 	private int numberOfRooms;
@@ -35,7 +35,7 @@ public class Apartment {
 	public Apartment() {}
 	
 	public Apartment(ApartmentType type, int numberOfRooms, int numberOfGuests, int priceForNight,
-			int timeForCheckIn, int timeForCheckOut, boolean active, Location location, Host host, Long id, String name) {
+			int timeForCheckIn, int timeForCheckOut, boolean active, Location location, Host host, int id, String name) {
 		
 		this.type = type;
 		this.numberOfRooms = numberOfRooms;
@@ -178,11 +178,11 @@ public class Apartment {
 		this.deleted = deleted;
 	}
 
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

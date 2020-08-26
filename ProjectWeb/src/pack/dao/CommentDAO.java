@@ -10,7 +10,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import pack.model.Apartment;
 import pack.model.Comment;
+import pack.model.Guest;
 
 public class CommentDAO {
 
@@ -94,8 +96,14 @@ public class CommentDAO {
 			for(Object o : comments) {
 				JSONObject commentJSON = (JSONObject) o;
 				
-				String guestUusername = (String) commentJSON.get("guest");
+				String guestUsername = (String) commentJSON.get("guest");
+				Guest guest = new Guest();
+				guest.setUsername(guestUsername);
+				
 				int apartmentId = (int) commentJSON.get("apartmentId");
+				Apartment apartment = new Apartment();
+				apartment.setId(apartmentId);
+				
 				String text = (String) commentJSON.get("text");
 				int rate = (int) commentJSON.get("rate");
 				boolean deleted = (Boolean) commentJSON.get("deleted");
@@ -103,9 +111,8 @@ public class CommentDAO {
 				if(deleted)
 					continue;
 				
-				//preko DAO
-				Comment comment = new Comment();
-				
+				Comment comment = new Comment(guest,apartment,text,rate);
+				comment.setDeleted(deleted);
 				
 				this.comments.add(comment);
 			}

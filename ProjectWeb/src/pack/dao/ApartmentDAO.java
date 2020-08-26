@@ -132,7 +132,7 @@ public class ApartmentDAO {
 	
 	public void loadApartments() {
 		JSONParser jsonParser = new JSONParser();
-		String fullPath = path + "/res/db/reservations.json";
+		String fullPath = path + "/res/db/apartments.json";
 		try {
 			
 			JSONArray apartments = (JSONArray) jsonParser.parse(new FileReader(fullPath));	
