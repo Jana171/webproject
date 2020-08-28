@@ -17,4 +17,14 @@ public class Host extends User{
 		super(username, password, name, lastname, gender, role);
 	}
 
+	public List<Apartment> getApartmentsToRent() {
+		return apartmentsToRent;
+	}
+
+	public void setApartmentsToRent(List<Apartment> apartmentsToRent) {
+		this.apartmentsToRent = apartmentsToRent;
+	}
+	
+	
+
 }

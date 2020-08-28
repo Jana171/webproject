@@ -15,15 +15,20 @@ import pack.enums.ApartmentType;
 import pack.model.Address;
 import pack.model.Amenity;
 import pack.model.Apartment;
+import pack.model.Host;
 import pack.model.Location;
 
 public class ApartmentDAO {
 	
 	private String path;
 	private List<Apartment> apartments = new ArrayList<Apartment>();
+	private ReservationDAO reservationDAO;
+	private CommentDAO commentDAO;
 	
 	public ApartmentDAO(String path) {
 		this.path = path;
+		this.reservationDAO = new ReservationDAO(path);
+		this.commentDAO = new CommentDAO(path);
 		this.loadApartments();
 	}
 	
@@ -31,6 +36,15 @@ public class ApartmentDAO {
 	
 	public List<Apartment> getApartments(String username) {
 		return apartments;
+	}
+	
+	public List<Apartment> getHostApartments(String username) {
+		List<Apartment> retVal = new ArrayList<Apartment>();
+		for(Apartment a : apartments)
+			if(a.getHost().equals(username))
+				retVal.add(a);
+		
+		return retVal;
 	}
 	
 	public Apartment getApartment(int id) {
@@ -133,6 +147,7 @@ public class ApartmentDAO {
 	public void loadApartments() {
 		JSONParser jsonParser = new JSONParser();
 		String fullPath = path + "/res/db/apartments.json";
+		System.out.println("Prava putanja ucitavanja: " + fullPath);
 		try {
 			
 			JSONArray apartments = (JSONArray) jsonParser.parse(new FileReader(fullPath));	
@@ -140,20 +155,26 @@ public class ApartmentDAO {
 			for(Object o : apartments) {
 				JSONObject apartmentJSON = (JSONObject) o;
 				
-				int id = (int) apartmentJSON.get("id");
+				Long id = (Long) apartmentJSON.get("id");
 				String name = (String) apartmentJSON.get("name");
 
 				String typeStr = (String) apartmentJSON.get("type");
 				ApartmentType type = ApartmentType.valueOf(typeStr);
 				
-				int numberOfRooms = (int) apartmentJSON.get("numberOfRooms");
-				int numberOfGuests = (int) apartmentJSON.get("numberOfGuests");
-				int priceForNight = (int) apartmentJSON.get("priceForNight");
-				int timeForCheckIn = (int) apartmentJSON.get("timeForCheckIn");
-				int timeForCheckOut = (int) apartmentJSON.get("timeForCheckOut");
+				int numberOfRooms = ((Long) apartmentJSON.get("numberOfRooms")).intValue();
+				int numberOfGuests = ((Long) apartmentJSON.get("numberOfGuests")).intValue();
+				int priceForNight = ((Long) apartmentJSON.get("priceForNight")).intValue();
+				int timeForCheckIn = ((Long) apartmentJSON.get("timeForCheckIn")).intValue();
+				int timeForCheckOut = ((Long) apartmentJSON.get("timeForCheckOut")).intValue();
 				boolean active = (boolean) apartmentJSON.get("active");
 				boolean deleted = (boolean) apartmentJSON.get("deleted");
+				
+				if(deleted)
+					continue;
+				
 				String hostUsername = (String) apartmentJSON.get("host");
+				Host host = new Host();
+				host.setUsername(hostUsername);
 				
 				JSONArray imagesJSON = (JSONArray) apartmentJSON.get("images");
 				List<String> images = new ArrayList<String>();
@@ -164,20 +185,20 @@ public class ApartmentDAO {
 				JSONArray datesForRentJSON = (JSONArray) apartmentJSON.get("datesForRent");
 				List<LocalDate> datesForRent= new ArrayList<LocalDate>();
 				for(int i = 0 ; i < datesForRentJSON.size(); i++) {
-					datesForRent.add((LocalDate) datesForRentJSON.get(i));
+					datesForRent.add(LocalDate.parse((String) datesForRentJSON.get(i)));
 				}
 				
 				JSONArray availableDatesJSON = (JSONArray) apartmentJSON.get("availableDates");
 				List<LocalDate> availableDates= new ArrayList<LocalDate>();
 				for(int i = 0 ; i < availableDatesJSON.size(); i++) {
-					availableDates.add((LocalDate) availableDatesJSON.get(i));
+					availableDates.add(LocalDate.parse((String) availableDatesJSON.get(i)));
 				}
 				
 				JSONArray amenitiesJSON = (JSONArray) apartmentJSON.get("amenities");
 				List<Amenity> amenities= new ArrayList<Amenity>();
 				for(int i = 0 ; i < amenitiesJSON.size(); i++) {
 					JSONObject amenityObject = (JSONObject) amenitiesJSON.get(i);
-					int amId = (int) amenityObject.get("id");
+					int amId = ((Long) amenityObject.get("id")).intValue();
 					String amName = (String) amenityObject.get("name");
 					boolean amDeleted= (Boolean) amenityObject.get("deleted");
 					
@@ -191,20 +212,22 @@ public class ApartmentDAO {
 				double latitude = (double) locationJSON.get("latitude");
 				boolean locDeleted= (boolean) locationJSON.get("deleted");
 				JSONObject addressJSON = (JSONObject) locationJSON.get("address");
-				String city = (String) apartmentJSON.get("city");
-				String street = (String) apartmentJSON.get("street");
-				String number = (String) apartmentJSON.get("number");
-				boolean adrDeleted = (boolean) apartmentJSON.get("deleted");
+				String city = (String) addressJSON.get("city");
+				String street = (String) addressJSON.get("street");
+				String number = (String) addressJSON.get("number");
+				boolean adrDeleted = (boolean) addressJSON.get("deleted");
 				Address address = new Address(street,city,number);
 				address.setDeleted(adrDeleted);
 				Location location = new Location(longitude,latitude,address);
 				location.setDeleted(locDeleted);
 				
-								
-				//preko DAO
-				Apartment apartment = new Apartment();
-				
-				
+				Apartment apartment = new Apartment(type,numberOfRooms,numberOfGuests,priceForNight,timeForCheckIn,timeForCheckOut,active,location,host,id,name);				
+				apartment.setAvailableDates(availableDates);
+				apartment.setAmenities(amenities);
+				apartment.setDatesForRent(datesForRent);
+				apartment.setImages(images);
+				apartment.setReservations(reservationDAO.getApartmentReservations(id));
+				apartment.setComments(commentDAO.getApartmentComments(id));
 				this.apartments.add(apartment);
 			}
 		} catch (FileNotFoundException e) {

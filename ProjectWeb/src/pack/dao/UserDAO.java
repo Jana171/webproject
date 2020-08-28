@@ -119,16 +119,25 @@ public class UserDAO {
 				if(deleted)
 					continue;
 				
-				User user;
 				if(role == Role.ADMIN) {
-					user = new Admin(username,password,name,lastname,gender,role);
+					Admin admin = new Admin(username,password,name,lastname,gender,role);
+					this.users.add(admin);
+					this.users.add(admin);
+					
 				} else if (role == Role.GUEST) {
-					user = new Guest(username,password,name,lastname,gender,role);
+					Guest guest = new Guest(username,password,name,lastname,gender,role);
+					guest.setReservations(this.reservationDAO.getUserReservations(username));
+					guest.setRentedApartments(this.reservationDAO.getGuestRentedApartments(username));
+					this.users.add(guest);
+					
 				} else {
-					user = new Host(username,password,name,lastname,gender,role);
+					Host host = new Host(username,password,name,lastname,gender,role);
+					host.setApartmentsToRent(apartmentDAO.getHostApartments(username));
+					this.users.add(host);
 				}
 				
-				this.users.add(user);
+				
+				
 			}
 		} catch (FileNotFoundException e) {
 			System.out.println("Nije nasao fajl");
@@ -138,7 +147,7 @@ public class UserDAO {
 			e.printStackTrace();
 		}
 		
-		System.out.println("Ucitana vozila");
+		System.out.println("Ucitani korisnici");
 	}
 
 }

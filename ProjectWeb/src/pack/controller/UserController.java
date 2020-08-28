@@ -49,7 +49,6 @@ public class UserController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String register(User user) {
 		UserService userService = getUserService();
-		System.out.println(userService.checkIfUserExists(user));
 		if(!userService.checkIfUserExists(user))
 			userService.addUser(user);
 		
@@ -81,17 +80,7 @@ public class UserController {
 		
 		return "Successfull!";
 	}
-	
-	@GET
-	@Path("/check")
-	public void check(@Context  HttpServletRequest request) {
 
-		User user = (User) request.getSession().getAttribute("user");
-		if(user == null)
-			System.out.println("NULL");
-		else
-			System.out.println(user.getUsername());
-	}
 	
 	private UserService getUserService() {	
 		

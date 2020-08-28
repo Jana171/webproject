@@ -12,6 +12,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import pack.enums.ReservationStatus;
+import pack.model.Apartment;
+import pack.model.Guest;
 import pack.model.Reservation;
 
 public class ReservationDAO {
@@ -32,6 +34,17 @@ public class ReservationDAO {
 		for(Reservation r : this.reservations) {
 			if(r.getGuest().getUsername().equals(username)) {
 				retVal.add(r);
+			}
+		}
+		return retVal;
+	}
+	
+	public List<Apartment> getGuestRentedApartments(String username) {
+		List<Apartment> retVal = new ArrayList<Apartment>();
+		
+		for(Reservation r : this.reservations) {
+			if(r.getGuest().getUsername().equals(username) && !retVal.contains(r.getApartment())) {
+				retVal.add(r.getApartment());
 			}
 		}
 		return retVal;
@@ -93,28 +106,32 @@ public class ReservationDAO {
 	public void loadReservations() {
 		JSONParser jsonParser = new JSONParser();
 		String fullPath = path + "/res/db/reservations.json";
+		System.out.println("Prava putanja ucitavanja: " + fullPath);
 		try {
-			
+			System.out.println(fullPath);
 			JSONArray reservations = (JSONArray) jsonParser.parse(new FileReader(fullPath));	
 
 			for(Object o : reservations) {
 				JSONObject reservationJSON = (JSONObject) o;
 				
-				int apartmentId = (int) reservationJSON.get("apartmentId");
+				Long apartmentId = (Long) reservationJSON.get("apartmentId");
+				Apartment apartment = new Apartment();
+				apartment.setId(apartmentId);
+
 				String guestUusername = (String) reservationJSON.get("guest");
+				Guest guest = new Guest();
+				guest.setUsername(guestUusername);
 				
 				String statusStr = (String) reservationJSON.get("status");
 				ReservationStatus status = ReservationStatus.valueOf(statusStr);
 				
 				String messageWhenBooking = (String) reservationJSON.get("messageWhenBooking");
 
-				int totalPrice = (int) reservationJSON.get("totalPrice");
-				String numberOfOvernightsStay = (String) reservationJSON.get("numberOfOvernightsStay");
-				LocalDate startDate = (LocalDate) reservationJSON.get("startDate");
+				int totalPrice = (int) (long) reservationJSON.get("totalPrice");
+				int numberOfOvernightsStay = (int) (long)  reservationJSON.get("numberOfOvernightsStay");
+				LocalDate startDate = LocalDate.parse((String) reservationJSON.get("startDate"));
 				
-				//preko DAO
-				Reservation reservation = new Reservation();
-				
+				Reservation reservation = new Reservation(apartment,startDate,numberOfOvernightsStay,totalPrice,messageWhenBooking,guest,status);
 				
 				this.reservations.add(reservation);
 			}

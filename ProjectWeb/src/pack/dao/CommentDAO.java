@@ -89,6 +89,7 @@ public class CommentDAO {
 	public void loadComments() {
 		JSONParser jsonParser = new JSONParser();
 		String fullPath = path + "/res/db/comments.json";
+		System.out.println("Prava putanja ucitavanja: " + fullPath);
 		try {
 			
 			JSONArray comments = (JSONArray) jsonParser.parse(new FileReader(fullPath));	
@@ -100,12 +101,12 @@ public class CommentDAO {
 				Guest guest = new Guest();
 				guest.setUsername(guestUsername);
 				
-				int apartmentId = (int) commentJSON.get("apartmentId");
+				Long apartmentId = (Long) commentJSON.get("apartmentId");
 				Apartment apartment = new Apartment();
 				apartment.setId(apartmentId);
 				
 				String text = (String) commentJSON.get("text");
-				int rate = (int) commentJSON.get("rate");
+				int rate = ((Long) commentJSON.get("rate")).intValue();
 				boolean deleted = (Boolean) commentJSON.get("deleted");
 				
 				if(deleted)
