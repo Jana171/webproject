@@ -1,0 +1,42 @@
+[
+	{
+		"id":1,
+		"name":"Hotel Moskva",
+		"type": "WHOLE",
+		"numberOfRooms":100,
+		"numberOfGuests":471,
+		"priceForNight":50,
+		"timeForCheckIn":14,
+		"timeForCheckOut":10,
+		"active":true,
+		"deleted":false,
+		"host":"JelenaDrkos",
+		"images":[],
+		"datesForRent":["2020-08-25","2020-08-26","2020-08-27","2020-08-28","2020-08-29"],
+		"availableDates":["2020-08-25","2020-08-27","2020-08-28","2020-08-29"],
+		"amenities":[
+			{
+				"id":1,
+				"name":"Parking",
+				"deleted":false
+			},
+			{
+				"id":2,
+				"name":"WiFi",
+				"deleted":false
+			}
+		],
+		"location": {
+			"longitude":40.10,
+			"latitude":40.20,
+			"deleted":false,
+			"address":{
+				"city":"Belgrade",
+				"street":"Juzni Bulevar",
+				"number":"1a",
+				"deleted":false
+			}
+		}
+		
+	}
+]

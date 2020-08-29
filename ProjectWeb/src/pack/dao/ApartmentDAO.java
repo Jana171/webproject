@@ -40,8 +40,8 @@ public class ApartmentDAO {
 	
 	public List<Apartment> getHostApartments(String username) {
 		List<Apartment> retVal = new ArrayList<Apartment>();
-		for(Apartment a : apartments)
-			if(a.getHost().equals(username))
+		for(Apartment a : apartments) 
+			if(a.getHost().getUsername().equals(username))
 				retVal.add(a);
 		
 		return retVal;

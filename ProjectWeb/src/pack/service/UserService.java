@@ -1,8 +1,10 @@
 package pack.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pack.dao.UserDAO;
+import pack.model.Reservation;
 import pack.model.User;
 
 public class UserService {
@@ -25,13 +27,15 @@ public class UserService {
 		userDAO.addUser(user);
 	}
 	
-	public void updateUser() {
-		
+	public User updateUser(User user) {
+		User retVal = this.userDAO.updateUser(user);
+		return retVal;
 	}
 	
 	public void deleteUser() {
 		
 	}
+	
 	
 	public boolean checkIfUserExists(User user) {
 		User u = userDAO.getUser(user.getUsername());

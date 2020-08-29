@@ -15,6 +15,7 @@ import pack.enums.Role;
 import pack.model.Admin;
 import pack.model.Guest;
 import pack.model.Host;
+import pack.model.Reservation;
 import pack.model.User;
 
 public class UserDAO {
@@ -37,6 +38,10 @@ public class UserDAO {
 		return users;
 	}
 	
+	
+	
+	
+	
 	public User getUser(String username) {
 		User user = null;
 		
@@ -49,8 +54,13 @@ public class UserDAO {
 		return user;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void addUser(User user) {
+		users.add(user);
+		saveUser(user);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void saveUser(User user) {
 		JSONParser jsonParser = new JSONParser();
 		String fullPath = path + "/res/db/users.json";
 		System.out.println("Prava putanja: " + fullPath);
@@ -67,9 +77,7 @@ public class UserDAO {
 			userJSON.put("role", user.getRole().toString());
 			userJSON.put("deleted", false);
 			
-			users.add(user);
 			usersArray.add(userJSON);
-			System.out.println(fullPath);
 			FileWriter file = new FileWriter(fullPath);
             file.write(usersArray.toJSONString());
             file.close();
@@ -84,8 +92,20 @@ public class UserDAO {
 		
 	}
 	
-	public void updateUser() {
-		
+	public User updateUser(User user) {
+		for(int i = 0 ; i < this.users.size(); i++) {
+			if(this.users.get(i).getUsername().equals(user.getUsername())) {
+				this.users.get(i).setGender(user.getGender());
+				this.users.get(i).setLastname(user.getLastname());
+				this.users.get(i).setName(user.getName());
+				this.users.get(i).setPassword(user.getPassword());
+				
+				return this.users.get(i);
+				//delete from file
+				//save file
+			}
+		}
+		return null;
 	}
 	
 	public void deleteUser() {
@@ -122,7 +142,6 @@ public class UserDAO {
 				if(role == Role.ADMIN) {
 					Admin admin = new Admin(username,password,name,lastname,gender,role);
 					this.users.add(admin);
-					this.users.add(admin);
 					
 				} else if (role == Role.GUEST) {
 					Guest guest = new Guest(username,password,name,lastname,gender,role);
@@ -132,6 +151,7 @@ public class UserDAO {
 					
 				} else {
 					Host host = new Host(username,password,name,lastname,gender,role);
+					System.out.println(apartmentDAO.getHostApartments(username).size());
 					host.setApartmentsToRent(apartmentDAO.getHostApartments(username));
 					this.users.add(host);
 				}

@@ -30,9 +30,12 @@ public class ReservationDAO {
 	
 	public List<Reservation> getUserReservations(String username) {
 		List<Reservation> retVal = new ArrayList<Reservation>();
+		System.out.println("AAA");
 		
 		for(Reservation r : this.reservations) {
+			System.out.println("BRrr");
 			if(r.getGuest().getUsername().equals(username)) {
+				System.out.println("CCC");
 				retVal.add(r);
 			}
 		}
@@ -52,7 +55,7 @@ public class ReservationDAO {
 	
 	public List<Reservation> getApartmentReservations(Long id) {
 		List<Reservation> retVal = new ArrayList<Reservation>();
-		
+		System.out.println(id);
 		for(Reservation r : this.reservations) {
 			if(r.getApartment().getId()==id) {
 				retVal.add(r);

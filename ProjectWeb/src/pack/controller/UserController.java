@@ -19,8 +19,8 @@ import pack.service.UserService;
 @Path("/users")
 public class UserController {
 
-	//@Context
-	//HttpServletRequest request;
+	@Context
+	HttpServletRequest request;
 	@Context
 	ServletContext ctx;
 	
@@ -30,7 +30,13 @@ public class UserController {
 	@Path("/hello")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String helloWorld() {
-		return "Hello World!";
+		if(request.getSession().getAttribute("user") == null) {
+			return "Not logged";
+			
+		} else {
+			User user = (User) request.getSession().getAttribute("user");
+			return "Logged " + user.getUsername();
+		}
 	}
 	
 	
@@ -42,6 +48,8 @@ public class UserController {
 	public List<User> getAllUsers() {
 		return this.getUserService().getAllUsers();
 	}
+	
+	
 	
 	@POST
 	@Path("/register")
@@ -59,7 +67,7 @@ public class UserController {
 	@Path("/login")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public User login(LoginDTO loginDTO, @Context HttpServletRequest request) {
+	public User login(LoginDTO loginDTO) {
 		UserService userService = getUserService();
 		User user = userService.getUser(loginDTO.getUsername());
 		
@@ -75,10 +83,22 @@ public class UserController {
 	@POST
 	@Path("/logout")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String logout(@Context HttpServletRequest request) {
+	public String logout() {
 		request.getSession().setAttribute("user",null);
 		
 		return "Successfull!";
+	}
+	
+	
+	@POST
+	@Path("/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public User update(User user) {
+		UserService userService = getUserService();
+		User retVal = userService.updateUser(user);
+		
+		return retVal;
 	}
 
 	
