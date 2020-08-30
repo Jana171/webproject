@@ -13,6 +13,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import pack.dto.LoginDTO;
+import pack.model.Admin;
+import pack.model.Guest;
+import pack.model.Host;
 import pack.model.User;
 import pack.service.UserService;
 
@@ -49,6 +52,23 @@ public class UserController {
 		return this.getUserService().getAllUsers();
 	}
 	
+	@GET
+	@Path("/admins")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Admin> getAllAdmins() {
+		return this.getUserService().getAllAdmins();
+	}
+	
+	@GET
+	@Path("/hosts")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Host> getAllHosts() {
+		return this.getUserService().getAllHosts();
+	}
+	
+
+
+	
 	
 	
 	@POST
@@ -80,6 +100,13 @@ public class UserController {
 		
 	}
 	
+	@GET
+	@Path("/loggedHost")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Host getLoggedHost() {
+		return (Host) request.getSession().getAttribute("user");
+	}
+	
 	@POST
 	@Path("/logout")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -97,6 +124,17 @@ public class UserController {
 	public User update(User user) {
 		UserService userService = getUserService();
 		User retVal = userService.updateUser(user);
+		
+		return retVal;
+	}
+	
+	@GET
+	@Path("/my-apartments-guest-history")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Guest> myApartmentsGuestHistory() {
+		Host host = (Host) request.getSession().getAttribute("user");
+		UserService userService = getUserService();
+		List<Guest> retVal = userService.getMyApartmentsGuestHistory(host);
 		
 		return retVal;
 	}

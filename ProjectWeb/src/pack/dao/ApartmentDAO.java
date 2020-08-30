@@ -34,8 +34,17 @@ public class ApartmentDAO {
 	
 	//refaktorisi posebna metoda za json obj pa izdvoj save u posebnu a add kao poziv te 2
 	
-	public List<Apartment> getApartments(String username) {
+	public List<Apartment> getAllApartments() {
 		return apartments;
+	}
+	
+	public Apartment getApartment(Long id) {
+		for(Apartment a: this.apartments) {
+			if(a.getId() == id)
+				return a;
+		}
+		
+		return null;
 	}
 	
 	public List<Apartment> getHostApartments(String username) {
@@ -47,12 +56,13 @@ public class ApartmentDAO {
 		return retVal;
 	}
 	
-	public Apartment getApartment(int id) {
-		for(Apartment a: apartments)
-			if(a.getId() == id)
-				return a;
+	public List<Apartment> getGuestRentedApartmentsByIds(List<Apartment> apartmentWithIds) {
+		List<Apartment> retVal = new ArrayList<Apartment>();
+		for(Apartment a : apartmentWithIds) {
+			retVal.add(this.getApartment(a.getId()));
+		}
 		
-		return null;
+		return retVal;
 	}
 	
 	

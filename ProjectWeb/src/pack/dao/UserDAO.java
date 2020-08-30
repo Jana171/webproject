@@ -13,9 +13,9 @@ import org.json.simple.parser.JSONParser;
 import pack.enums.Gender;
 import pack.enums.Role;
 import pack.model.Admin;
+import pack.model.Apartment;
 import pack.model.Guest;
 import pack.model.Host;
-import pack.model.Reservation;
 import pack.model.User;
 
 public class UserDAO {
@@ -37,9 +37,6 @@ public class UserDAO {
 	public List<User> getAllUsers() {
 		return users;
 	}
-	
-	
-	
 	
 	
 	public User getUser(String username) {
@@ -93,19 +90,15 @@ public class UserDAO {
 	}
 	
 	public User updateUser(User user) {
-		for(int i = 0 ; i < this.users.size(); i++) {
-			if(this.users.get(i).getUsername().equals(user.getUsername())) {
-				this.users.get(i).setGender(user.getGender());
-				this.users.get(i).setLastname(user.getLastname());
-				this.users.get(i).setName(user.getName());
-				this.users.get(i).setPassword(user.getPassword());
+		User toUpdate = this.getUser(user.getUsername());
+		toUpdate.setGender(user.getGender());
+		toUpdate.setLastname(user.getLastname());
+		toUpdate.setName(user.getName());
+		toUpdate.setPassword(user.getPassword());
+		//delete from file
+		//save file
 				
-				return this.users.get(i);
-				//delete from file
-				//save file
-			}
-		}
-		return null;
+		return toUpdate;
 	}
 	
 	public void deleteUser() {
@@ -145,13 +138,13 @@ public class UserDAO {
 					
 				} else if (role == Role.GUEST) {
 					Guest guest = new Guest(username,password,name,lastname,gender,role);
-					guest.setReservations(this.reservationDAO.getUserReservations(username));
-					guest.setRentedApartments(this.reservationDAO.getGuestRentedApartments(username));
+					guest.setReservations(this.reservationDAO.getGuestReservations(username));
+					List<Apartment> apartmentWithIds = this.reservationDAO.getGuestRentedApartmentsIds(username);
+					guest.setRentedApartments(apartmentDAO.getGuestRentedApartmentsByIds(apartmentWithIds));
 					this.users.add(guest);
 					
 				} else {
 					Host host = new Host(username,password,name,lastname,gender,role);
-					System.out.println(apartmentDAO.getHostApartments(username).size());
 					host.setApartmentsToRent(apartmentDAO.getHostApartments(username));
 					this.users.add(host);
 				}

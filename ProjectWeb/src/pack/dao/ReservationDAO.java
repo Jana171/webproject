@@ -28,25 +28,22 @@ public class ReservationDAO {
 	
 	//refaktorisi posebna metoda za json obj pa izdvoj save u posebnu a add kao poziv te 2
 	
-	public List<Reservation> getUserReservations(String username) {
+	public List<Reservation> getGuestReservations(String username) {
 		List<Reservation> retVal = new ArrayList<Reservation>();
-		System.out.println("AAA");
 		
 		for(Reservation r : this.reservations) {
-			System.out.println("BRrr");
 			if(r.getGuest().getUsername().equals(username)) {
-				System.out.println("CCC");
 				retVal.add(r);
 			}
 		}
 		return retVal;
 	}
 	
-	public List<Apartment> getGuestRentedApartments(String username) {
+	public List<Apartment> getGuestRentedApartmentsIds(String username) {
 		List<Apartment> retVal = new ArrayList<Apartment>();
 		
 		for(Reservation r : this.reservations) {
-			if(r.getGuest().getUsername().equals(username) && !retVal.contains(r.getApartment())) {
+			if(r.getGuest().getUsername().equals(username) && !retVal.contains(r.getApartment().getId())) {
 				retVal.add(r.getApartment());
 			}
 		}
