@@ -56,94 +56,20 @@ public class ApartmentDAO {
 		return retVal;
 	}
 	
-	public List<Apartment> getGuestRentedApartmentsByIds(List<Apartment> apartmentWithIds) {
+	public List<Apartment> getGuestRentedApartmentsByIds(List<Long> apartmentWithIds) {
 		List<Apartment> retVal = new ArrayList<Apartment>();
-		for(Apartment a : apartmentWithIds) {
-			retVal.add(this.getApartment(a.getId()));
+		for(Long a : apartmentWithIds) {
+			retVal.add(this.getApartment(a));
 		}
 		
 		return retVal;
 	}
 	
 	
-	@SuppressWarnings("unchecked")
-	public void addApartment(Apartment apartment) {
-		JSONParser jsonParser = new JSONParser();
-		String fullPath = path + "/res/db/apartments.json";
-		try {
-			
-			JSONArray apartmentsArray = (JSONArray) jsonParser.parse(new FileReader(fullPath));	
-			
-			JSONObject apartmentJSON = new JSONObject();
-			apartmentJSON.put("id", apartment.getId());
-			apartmentJSON.put("name", apartment.getName());
-			apartmentJSON.put("type",apartment.getType().toString());
-			apartmentJSON.put("numberOfRooms", apartment.getNumberOfRooms());
-			apartmentJSON.put("numberOfGuests", apartment.getNumberOfGuests());
-			apartmentJSON.put("priceForNight",apartment.getPriceForNight());
-			apartmentJSON.put("timeForCheckIn",apartment.getTimeForCheckIn());
-			apartmentJSON.put("timeForCheckOut",apartment.getTimeForCheckOut());
-			apartmentJSON.put("active",apartment.isActive());
-			apartmentJSON.put("deleted",apartment.isDeleted());
-			apartmentJSON.put("host",apartment.getHost().getUsername());
-
-			
-			JSONArray imagesJSON = new JSONArray();
-			for(String im : apartment.getImages()) {
-				imagesJSON.add(im);
-			}
-			apartmentJSON.put("images",imagesJSON);
-			
-			
-			JSONArray datesForRentJSON = new JSONArray();
-			for(LocalDate ld : apartment.getDatesForRent()) {
-				datesForRentJSON.add(ld);
-			}
-			apartmentJSON.put("datesForRent",datesForRentJSON);
-			
-			JSONArray availableDatesJSON = new JSONArray();
-			for(LocalDate ld : apartment.getAvailableDates()) {
-				datesForRentJSON.add(ld);
-			}
-			apartmentJSON.put("availableDates",availableDatesJSON);
-			
-			JSONArray amenitiesJSON = new JSONArray();
-			for(Amenity am : apartment.getAmenities()) {
-				JSONObject amenityJSON = new JSONObject();
-				amenityJSON.put("id", am.getId());
-				amenityJSON.put("title", am.getTitle());
-				amenityJSON.put("deleted", am.isDeleted());
-				amenitiesJSON.add(amenityJSON);
-			}
-			apartmentJSON.put("amenities",amenitiesJSON);
-			
-			JSONObject locationJSON = new JSONObject();
-			locationJSON.put("longitude", apartment.getLocation().getLongitude());
-			locationJSON.put("latitude", apartment.getLocation().getLatitude());
-			locationJSON.put("deleted", apartment.getLocation().isDeleted());
-			JSONObject addressJSON = new JSONObject();
-			addressJSON.put("city", apartment.getLocation().getAddress().getCity());
-			addressJSON.put("street", apartment.getLocation().getAddress().getStreet());
-			addressJSON.put("numer", apartment.getLocation().getAddress().getNumber());
-			addressJSON.put("deleted", apartment.getLocation().getAddress().isDeleted());
-			locationJSON.put("address", addressJSON);
-			apartmentJSON.put("location", locationJSON);
-			
-			apartments.add(apartment);
-			apartmentsArray.add(apartmentJSON);
-
-			FileWriter file = new FileWriter(fullPath);
-            file.write(apartmentsArray.toJSONString());
-            file.close();
-			
-		} catch (FileNotFoundException e) {
-			System.out.println("Nije nasao fajl");
-			e.printStackTrace();
-		} catch (Exception e) {
-			System.out.println("Vrv pars exception");
-			e.printStackTrace();
-		}
-		
+	public boolean addApartment(Apartment apartment) {
+		apartments.add(apartment);
+		this.saveApartment(apartment);
+		return true;
 	}
 	
 	public void updateApartment() {
@@ -209,7 +135,7 @@ public class ApartmentDAO {
 				for(int i = 0 ; i < amenitiesJSON.size(); i++) {
 					JSONObject amenityObject = (JSONObject) amenitiesJSON.get(i);
 					int amId = ((Long) amenityObject.get("id")).intValue();
-					String amName = (String) amenityObject.get("name");
+					String amName = (String) amenityObject.get("title");
 					boolean amDeleted= (Boolean) amenityObject.get("deleted");
 					
 					Amenity amenity = new Amenity(amId,amName);
@@ -249,6 +175,85 @@ public class ApartmentDAO {
 		}
 		
 		System.out.println("Ucitana vozila");
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void saveApartment(Apartment apartment) {
+		JSONParser jsonParser = new JSONParser();
+		String fullPath = path + "/res/db/apartments.json";
+		try {
+			
+			JSONArray apartmentsArray = (JSONArray) jsonParser.parse(new FileReader(fullPath));	
+			
+			JSONObject apartmentJSON = new JSONObject();
+			apartmentJSON.put("id", apartment.getId());
+			apartmentJSON.put("name", apartment.getName());
+			apartmentJSON.put("type",apartment.getType().toString());
+			apartmentJSON.put("numberOfRooms", apartment.getNumberOfRooms());
+			apartmentJSON.put("numberOfGuests", apartment.getNumberOfGuests());
+			apartmentJSON.put("priceForNight",apartment.getPriceForNight());
+			apartmentJSON.put("timeForCheckIn",apartment.getTimeForCheckIn());
+			apartmentJSON.put("timeForCheckOut",apartment.getTimeForCheckOut());
+			apartmentJSON.put("active",apartment.isActive());
+			apartmentJSON.put("deleted",apartment.isDeleted());
+			apartmentJSON.put("host",apartment.getHost().getUsername());
+
+			
+			JSONArray imagesJSON = new JSONArray();
+			for(String im : apartment.getImages()) {
+				imagesJSON.add(im);
+			}
+			apartmentJSON.put("images",imagesJSON);
+			
+			
+			JSONArray datesForRentJSON = new JSONArray();
+			for(LocalDate ld : apartment.getDatesForRent()) {
+				datesForRentJSON.add(ld);
+			}
+			apartmentJSON.put("datesForRent",datesForRentJSON);
+			
+			JSONArray availableDatesJSON = new JSONArray();
+			for(LocalDate ld : apartment.getAvailableDates()) {
+				datesForRentJSON.add(ld);
+			}
+			apartmentJSON.put("availableDates",availableDatesJSON);
+			
+			JSONArray amenitiesJSON = new JSONArray();
+			for(Amenity am : apartment.getAmenities()) {
+				JSONObject amenityJSON = new JSONObject();
+				amenityJSON.put("id", am.getId());
+				amenityJSON.put("title", am.getTitle());
+				amenityJSON.put("deleted", am.isDeleted());
+				amenitiesJSON.add(amenityJSON);
+			}
+			apartmentJSON.put("amenities",amenitiesJSON);
+			
+			JSONObject locationJSON = new JSONObject();
+			locationJSON.put("longitude", apartment.getLocation().getLongitude());
+			locationJSON.put("latitude", apartment.getLocation().getLatitude());
+			locationJSON.put("deleted", apartment.getLocation().isDeleted());
+			JSONObject addressJSON = new JSONObject();
+			addressJSON.put("city", apartment.getLocation().getAddress().getCity());
+			addressJSON.put("street", apartment.getLocation().getAddress().getStreet());
+			addressJSON.put("numer", apartment.getLocation().getAddress().getNumber());
+			addressJSON.put("deleted", apartment.getLocation().getAddress().isDeleted());
+			locationJSON.put("address", addressJSON);
+			apartmentJSON.put("location", locationJSON);
+			
+			apartmentsArray.add(apartmentJSON);
+
+			FileWriter file = new FileWriter(fullPath);
+            file.write(apartmentsArray.toJSONString());
+            file.close();
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("Nije nasao fajl");
+			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Vrv pars exception");
+			e.printStackTrace();
+		}
+		
 	}
 
 }

@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pack.dao.ApartmentDAO;
+import pack.dao.UserDAO;
 import pack.enums.Role;
 import pack.model.Apartment;
+import pack.model.Host;
+import pack.model.Reservation;
 import pack.model.User;
 
 public class ApartmentService {
@@ -19,6 +22,12 @@ public class ApartmentService {
 	
 	public List<Apartment> getAllApartments() {
 		return apartmentDAO.getAllApartments();
+	}
+	
+	public boolean addApartment(Apartment apartment, UserDAO userDAO) {
+		Host host = (Host) userDAO.getUser(apartment.getHost().getUsername());
+		host.getApartmentsToRent().add(apartment);
+		return apartmentDAO.addApartment(apartment);
 	}
 	
 	public List<Apartment> getAllApartmentsByUserRole(User user) {
@@ -44,6 +53,12 @@ public class ApartmentService {
 		
 		
 		return retVal;
+	}
+	
+	public boolean addReservationToApartment(Reservation reservation) {
+		Apartment apartment = apartmentDAO.getApartment(reservation.getApartment().getId());
+		apartment.getReservations().add(reservation);
+		return true;
 	}
 	
 

@@ -3,6 +3,7 @@ package pack.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import pack.dao.AmenityDAO;
 import pack.dao.UserDAO;
 import pack.model.Admin;
 import pack.model.Apartment;
@@ -14,9 +15,11 @@ import pack.model.User;
 public class UserService {
 	
 	public UserDAO userDAO;
+	public AmenityDAO amenityDAO;
 	
 	public UserService(String path) {
 		this.userDAO = new UserDAO(path);
+		this.amenityDAO = new AmenityDAO(path);
 	}
 	
 	public List<User> getAllUsers() {
@@ -85,6 +88,12 @@ public class UserService {
 		else
 			return true;
 		
+	}
+	
+	public boolean addReservationToGuest(Reservation reservation) {
+		Guest guest = (Guest) userDAO.getUser(reservation.getGuest().getUsername());
+		guest.getReservations().add(reservation);
+		return true;
 	}
 	
 	public List<Guest> getMyApartmentsGuestHistory(Host host) {

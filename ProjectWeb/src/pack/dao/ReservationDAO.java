@@ -39,12 +39,24 @@ public class ReservationDAO {
 		return retVal;
 	}
 	
+	//kako ovo radi
+	/*@SuppressWarnings("unlikely-arg-type")
 	public List<Apartment> getGuestRentedApartmentsIds(String username) {
 		List<Apartment> retVal = new ArrayList<Apartment>();
 		
 		for(Reservation r : this.reservations) {
 			if(r.getGuest().getUsername().equals(username) && !retVal.contains(r.getApartment().getId())) {
 				retVal.add(r.getApartment());
+			}
+		}
+		return retVal;
+	}*/
+	public List<Long> getGuestRentedApartmentsIds(String username) {
+		List<Long> retVal = new ArrayList<Long>();
+		
+		for(Reservation r : this.reservations) {
+			if(r.getGuest().getUsername().equals(username) && !retVal.contains(r.getApartment().getId())) {
+				retVal.add(r.getApartment().getId());
 			}
 		}
 		return retVal;
@@ -59,6 +71,10 @@ public class ReservationDAO {
 			}
 		}
 		return retVal;
+	}
+	
+	public List<Reservation> getAllReservations() {
+		return reservations;
 	}
 	
 	@SuppressWarnings("unchecked")

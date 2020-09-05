@@ -17,12 +17,12 @@
 		"amenities":[
 			{
 				"id":1,
-				"name":"Parking",
+				"title":"Parking",
 				"deleted":false
 			},
 			{
 				"id":2,
-				"name":"WiFi",
+				"title":"WiFi",
 				"deleted":false
 			}
 		],
