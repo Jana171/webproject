@@ -7,14 +7,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import pack.model.Comment;
 import pack.model.Reservation;
 import pack.model.User;
 import pack.service.ApartmentService;
+import pack.service.CommentService;
 import pack.service.ReservationService;
 import pack.service.UserService;
 
@@ -52,6 +56,38 @@ public class ReservationController {
 		return "<h3>Successfull!</h3>";
 	}
 	
+	@POST
+	@Path("/comments/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_HTML)
+	public String addComment(@PathParam("id") Long id, Comment comment) {
+		boolean possibleToLeaveComment = this.getReservationService().checkIfPossibleToLeaveComment(id);
+		if(possibleToLeaveComment) {
+			this.getCommentService().addComment(comment);
+			this.getApartmentService().addCommentToApartment(comment);
+			return "<h3>Successfull!</h3>";			
+		} else {
+			return "<h3>Not possible!</h3>";
+		}
+
+	}
+	
+	@GET
+	@Path("/comments")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Comment> getAllComments() {
+		User user = (User) request.getSession().getAttribute("user");
+		return this.getCommentService().getAllComments(user, this.getApartmentService().apartmentDAO);
+	}
+	
+	@PUT
+	@Path("/comments/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Comment changeVisibilityOfComment(Comment comment) {
+		return this.getCommentService().changeVisibilityOfComment(comment);
+	}
+	
 	
 	private ReservationService getReservationService() {	
 		
@@ -84,6 +120,17 @@ public class ReservationController {
 		}
 		
 		return apartmentService;
+	}
+	
+	private CommentService getCommentService() {	
+		
+		CommentService commentService = (CommentService) ctx.getAttribute("commentService");
+		if (commentService == null) {
+			commentService = new CommentService(ctx.getRealPath(""));
+			ctx.setAttribute("commentService", commentService);
+		}
+		
+		return commentService;
 	}
 	
 

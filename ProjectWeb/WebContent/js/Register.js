@@ -1,37 +1,49 @@
 $("#button1").click(function(){
 	console.log("SSS");
-    	var male = false;
+    	var gender = "FEMALE";
     	
     	if ($('#checkId').is(":checked"))
     	{
-    	  male = true;
+    	  gender = "MALE";
     	}
     	
-    	user = toUserJSON($("#inputUsernameId").val(),$("#inputPasswordId").val(),$("#inputNameId").val(),$("#inputLastnameId").val(),
-				$("#inputEmailId").val(),male);
+    	//user = toUserJSON($("#inputUsernameId").val(),$("#inputPasswordId").val(),$("#inputNameId").val(),$("#inputLastnameId").val(),
+			//	$("#inputEmailId").val(),gender);
+    	user  = {
+    		"username":"aa",
+    		"password":"bb",
+    		"name": "cc",
+//    		"lastname": "dd",
+    		"email" : "ss"
+//    		"gender" : gender
+    	};
     	
     	console.log(user);
-    	
     	$.ajax({
-    		type: "POST",
+    		method: "POST",
     		url:"../ProjectWeb/rest/users/register",
-    		contentType: 'application/json',
+    		headers: { 
+    	        'Accept': 'application/json',
+    	        'Content-Type': 'application/json' 
+    	    },
     		data: user,
-    		dataType : "text"
+    		datatype : "application/json"
     	}).success(function(data) {
     		console.log("BBB");
+    		console.log(data);
+    	}).error(function(data) {
     		console.log(data);
     	});
 });
 
 
-function toUserJSON(username,password,name,lastname,email,male){
+function toUserJSON(username,password,name,lastname,email,gender){
 	return JSON.stringify({
 		"username":username,
 		"password":password,
 		"name": name,
 		"lastname": lastname,
 		"email" : email,
-		"male" : male
+		"gender" : gender
 	});
 }

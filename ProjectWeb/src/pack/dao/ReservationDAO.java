@@ -39,6 +39,17 @@ public class ReservationDAO {
 		return retVal;
 	}
 	
+	public Reservation getReservation(Long id) {
+		
+		for(Reservation r : this.reservations) {
+			if(r.getId() == id) {
+				return r;
+			}
+		}
+		System.out.println("NOT FOUND!");
+		return null;
+	}
+	
 	//kako ovo radi
 	/*@SuppressWarnings("unlikely-arg-type")
 	public List<Apartment> getGuestRentedApartmentsIds(String username) {
@@ -93,6 +104,7 @@ public class ReservationDAO {
 			reservationJSON.put("messageWhenBooking", reservation.getMessageWhenBooking());
 			reservationJSON.put("totalPrice",reservation.getTotalPrice());
 			reservationJSON.put("numberOfOvernightsStay",reservation.getNumberOfOvernightsStay());
+			reservationJSON.put("id",reservation.getId());
 			
 			reservations.add(reservation);
 			reservationsArray.add(reservationJSON);
@@ -142,12 +154,14 @@ public class ReservationDAO {
 				ReservationStatus status = ReservationStatus.valueOf(statusStr);
 				
 				String messageWhenBooking = (String) reservationJSON.get("messageWhenBooking");
+				
+				Long id = (Long) reservationJSON.get("id");
 
 				int totalPrice = (int) (long) reservationJSON.get("totalPrice");
 				int numberOfOvernightsStay = (int) (long)  reservationJSON.get("numberOfOvernightsStay");
 				LocalDate startDate = LocalDate.parse((String) reservationJSON.get("startDate"));
 				
-				Reservation reservation = new Reservation(apartment,startDate,numberOfOvernightsStay,totalPrice,messageWhenBooking,guest,status);
+				Reservation reservation = new Reservation(apartment,startDate,numberOfOvernightsStay,totalPrice,messageWhenBooking,guest,status,id);
 				
 				this.reservations.add(reservation);
 			}

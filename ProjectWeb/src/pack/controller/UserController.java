@@ -14,8 +14,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import pack.dto.LoginDTO;
+import pack.dto.RegisterDTO;
 import pack.model.Admin;
 import pack.model.Amenity;
 import pack.model.Guest;
@@ -45,6 +47,19 @@ public class UserController {
 		} else {
 			User user = (User) request.getSession().getAttribute("user");
 			return "Logged " + user.getUsername();
+		}
+	}
+	
+	@GET
+	@Path("/role")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String role() {
+		if(request.getSession().getAttribute("user") == null) {
+			return "";
+			
+		} else {
+			User user = (User) request.getSession().getAttribute("user");
+			return user.getRole().toString();
 		}
 	}
 	
@@ -79,29 +94,42 @@ public class UserController {
 	
 	@POST
 	@Path("/register")
-	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String register(User user) {
-		UserService userService = getUserService();
-		if(!userService.checkIfUserExists(user))
-			userService.addUser(user);
-		
-		return "Successfull!";
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response register(RegisterDTO registerDTO) {
+	//public Response register() {
+		System.out.println("AAA");
+		/*UserService userService = getUserService();
+		if(!userService.checkIfUserExists(registerDTO.getUsername())) {
+			System.out.println("BBB");
+			userService.register(registerDTO);
+			return Response.ok(registerDTO, MediaType.APPLICATION_JSON).build();
+		} else {
+			System.out.println("CCC");
+			return Response.status(Response.Status.NOT_FOUND).entity("Username is already taken!").build();
+		}*/
+		return Response.ok(new RegisterDTO(), MediaType.APPLICATION_JSON).build();
+			
 	}
 	
 	@POST
 	@Path("/login")
-	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public User login(LoginDTO loginDTO) {
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response login(LoginDTO loginDTO) {
+		
 		UserService userService = getUserService();
 		User user = userService.getUser(loginDTO.getUsername());
 		
 		if(user != null && user.getPassword().equals(loginDTO.getPassword())) {
+			System.out.println(user.getUsername());
 			request.getSession().setAttribute("user",user);
-			return user;
+			return Response.ok(user, MediaType.APPLICATION_JSON).build();
+//			return user;
 		} else {
-			return null;
+			System.out.println("AAA");
+			return Response.status(Response.Status.NOT_FOUND).entity("Credentials are inncorect!").build();
+//			return null;
 		}
 		
 	}
@@ -115,11 +143,13 @@ public class UserController {
 	
 	@POST
 	@Path("/logout")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String logout() {
-		request.getSession().setAttribute("user",null);
-		
-		return "Successfull!";
+	public Response logout() {
+		if(request.getSession().getAttribute("user") != null) {
+			request.getSession().setAttribute("user",null);
+			return Response.ok().build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).entity("There are no currently logged in users!").build();
+		}
 	}
 	
 	

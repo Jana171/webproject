@@ -7,14 +7,16 @@ public class Comment {
 	private String text;
 	private int rate;
 	private boolean deleted = false;
+	private boolean selected = true;
 	
 	public Comment() {}
 	
-	public Comment(Guest guest, Apartment apartment, String text, int rate) {
+	public Comment(Guest guest, Apartment apartment, String text, int rate, boolean selected) {
 		this.guest = guest;
 		this.apartment = apartment;
 		this.text = text;
 		this.rate = rate;
+		this.selected = selected;
 	}
 
 	public Guest getGuest() {
@@ -55,6 +57,14 @@ public class Comment {
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 	
 	

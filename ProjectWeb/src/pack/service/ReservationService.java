@@ -5,6 +5,7 @@ import java.util.List;
 
 import pack.dao.ApartmentDAO;
 import pack.dao.ReservationDAO;
+import pack.enums.ReservationStatus;
 import pack.enums.Role;
 import pack.model.Apartment;
 import pack.model.Guest;
@@ -61,7 +62,15 @@ public class ReservationService {
 	
 	public void addReservation(Reservation reservation) {
 		this.reservationDAO.addReservation(reservation);
+	}
+	
+	public boolean checkIfPossibleToLeaveComment(Long reservationId) {
+		Reservation reservation = this.reservationDAO.getReservation(reservationId);
+		if(reservation.getStatus() == ReservationStatus.FINISHED || reservation.getStatus() == ReservationStatus.REJECTED) {
+			return true;
+		}
 		
+		return false;
 	}
 	
 	

@@ -46,8 +46,13 @@ public class CommentDAO {
 		return retVal;
 	}
 	
+	public List<Comment> getAllComments() {
+		return comments;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public void addComment(Comment comment) {
+		comments.add(comment);
 		JSONParser jsonParser = new JSONParser();
 		String fullPath = path + "/res/db/comments.json";
 		try {
@@ -60,8 +65,9 @@ public class CommentDAO {
 			commentJSON.put("text", comment.getText());
 			commentJSON.put("rate", comment.getRate());
 			commentJSON.put("deleted",comment.isDeleted());
+			commentJSON.put("selected",comment.isSelected());
 			
-			comments.add(comment);
+			
 			commentsArray.add(commentJSON);
 
 			FileWriter file = new FileWriter(fullPath);
@@ -108,11 +114,12 @@ public class CommentDAO {
 				String text = (String) commentJSON.get("text");
 				int rate = ((Long) commentJSON.get("rate")).intValue();
 				boolean deleted = (Boolean) commentJSON.get("deleted");
+				boolean selected = (Boolean) commentJSON.get("selected");
 				
 				if(deleted)
 					continue;
 				
-				Comment comment = new Comment(guest,apartment,text,rate);
+				Comment comment = new Comment(guest,apartment,text,rate,selected);
 				comment.setDeleted(deleted);
 				
 				this.comments.add(comment);

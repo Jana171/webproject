@@ -4,6 +4,7 @@
 		"apartmentId":1,
 		"text":"Mjauuuu mjauuu",
 		"rate":3,
-		"deleted":false
+		"deleted":false,
+		"selected":true
 	}
 ]

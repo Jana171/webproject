@@ -13,11 +13,12 @@ public class Reservation {
 	private String messageWhenBooking;
 	private Guest guest;
 	private ReservationStatus status;
+	private Long id;
 	
 	public Reservation() {}
 	
 	public Reservation(Apartment apartment, LocalDate startDate, int numberOfOvernightsStay, int totalPrice,
-			String messsageWhenBooking, Guest guest, ReservationStatus status) {
+			String messsageWhenBooking, Guest guest, ReservationStatus status, Long id) {
 		
 		this.apartment = apartment;
 		this.startDate = startDate;
@@ -26,6 +27,7 @@ public class Reservation {
 		this.messageWhenBooking = messsageWhenBooking;
 		this.guest = guest;
 		this.status = status;
+		this.id = id;
 	}
 
 	public Apartment getApartment() {
@@ -82,6 +84,14 @@ public class Reservation {
 
 	public void setStatus(ReservationStatus status) {
 		this.status = status;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	

@@ -6,6 +6,17 @@
 		"totalPrice":50,
 		"messageWhenBooking":"No message",
 		"guest":"BoskoTheCat",
-		"status":"CREATED"
+		"status":"CREATED",
+		"id":1
+	},
+	{
+		"apartmentId":1,
+		"startDate":"2020-08-26",
+		"numberOfOvernightsStay":0,
+		"totalPrice":50,
+		"messageWhenBooking":"No message",
+		"guest":"BoskoTheCat",
+		"status":"FINISHED",
+		"id":2
 	}
 ]

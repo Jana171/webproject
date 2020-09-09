@@ -5,6 +5,9 @@ import java.util.List;
 
 import pack.dao.AmenityDAO;
 import pack.dao.UserDAO;
+import pack.dto.RegisterDTO;
+import pack.enums.Gender;
+import pack.enums.Role;
 import pack.model.Admin;
 import pack.model.Apartment;
 import pack.model.Guest;
@@ -66,8 +69,9 @@ public class UserService {
 		return userDAO.getUser(username);
 	}
 	
-	public void addUser(User user) {
-		userDAO.addUser(user);
+	public void register(RegisterDTO register) {
+		//userDAO.addUser(new Guest(register.getUsername(), register.getPassword(), register.getName(), register.getLastname(), Gender.valueOf(register.getGender()), Role.GUEST));
+		userDAO.addUser(new Guest(register.getUsername(), register.getPassword(), register.getName(), "aaa", Gender.MALE, Role.GUEST));
 	}
 	
 	public User updateUser(User user) {
@@ -80,8 +84,8 @@ public class UserService {
 	}
 	
 	
-	public boolean checkIfUserExists(User user) {
-		User u = userDAO.getUser(user.getUsername());
+	public boolean checkIfUserExists(String username) {
+		User u = userDAO.getUser(username);
 
 		if(u == null)
 			return false;

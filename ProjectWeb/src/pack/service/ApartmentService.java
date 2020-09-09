@@ -7,6 +7,7 @@ import pack.dao.ApartmentDAO;
 import pack.dao.UserDAO;
 import pack.enums.Role;
 import pack.model.Apartment;
+import pack.model.Comment;
 import pack.model.Host;
 import pack.model.Reservation;
 import pack.model.User;
@@ -58,6 +59,13 @@ public class ApartmentService {
 	public boolean addReservationToApartment(Reservation reservation) {
 		Apartment apartment = apartmentDAO.getApartment(reservation.getApartment().getId());
 		apartment.getReservations().add(reservation);
+		return true;
+	}
+	
+	//Bilo duplo dodavanje
+	  public boolean addCommentToApartment(Comment comment) {
+		Apartment apartment = apartmentDAO.getApartment(comment.getApartment().getId());
+		apartment.getComments().add(comment);
 		return true;
 	}
 	
