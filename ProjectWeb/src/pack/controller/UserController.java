@@ -1,5 +1,6 @@
 package pack.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -18,9 +19,9 @@ import javax.ws.rs.core.Response;
 
 import pack.dto.LoginDTO;
 import pack.dto.RegisterDTO;
+import pack.enums.Role;
 import pack.model.Admin;
 import pack.model.Amenity;
-import pack.model.Guest;
 import pack.model.Host;
 import pack.model.User;
 import pack.service.AmenityService;
@@ -70,7 +71,19 @@ public class UserController {
 	@Path("/all")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<User> getAllUsers() {
-		return this.getUserService().getAllUsers();
+		List<User> retVal = new ArrayList<User>();
+		
+		User user = (User) request.getSession().getAttribute("user");
+		if(user.getRole() == Role.ADMIN) {
+			retVal = this.getUserService().getAllUsers();
+		} else if (user.getRole() == Role.HOST) {
+			Host host = (Host) request.getSession().getAttribute("user");
+			UserService userService = getUserService();
+			retVal = userService.getMyApartmentsGuestHistory(host);
+			
+		}
+		
+		return retVal;
 	}
 	
 	@GET
@@ -97,9 +110,7 @@ public class UserController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response register(RegisterDTO registerDTO) {
-	//public Response register() {
-		System.out.println("AAA");
-		/*UserService userService = getUserService();
+		UserService userService = getUserService();
 		if(!userService.checkIfUserExists(registerDTO.getUsername())) {
 			System.out.println("BBB");
 			userService.register(registerDTO);
@@ -107,8 +118,7 @@ public class UserController {
 		} else {
 			System.out.println("CCC");
 			return Response.status(Response.Status.NOT_FOUND).entity("Username is already taken!").build();
-		}*/
-		return Response.ok(new RegisterDTO(), MediaType.APPLICATION_JSON).build();
+		}
 			
 	}
 	
@@ -141,6 +151,13 @@ public class UserController {
 		return (Host) request.getSession().getAttribute("user");
 	}
 	
+	@GET
+	@Path("/logged")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User getLoggedUser() {
+		return (User) request.getSession().getAttribute("user");
+	}
+	
 	@POST
 	@Path("/logout")
 	public Response logout() {
@@ -164,7 +181,7 @@ public class UserController {
 		return retVal;
 	}
 	
-	@GET
+	/*@GET
 	@Path("/my-apartments-guest-history")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Guest> myApartmentsGuestHistory() {
@@ -173,7 +190,7 @@ public class UserController {
 		List<Guest> retVal = userService.getMyApartmentsGuestHistory(host);
 		
 		return retVal;
-	}
+	}*/
 
 	
 	private UserService getUserService() {	

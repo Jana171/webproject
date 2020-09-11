@@ -5,8 +5,8 @@ public class RegisterDTO {
 	private String username;
 	private String password;
 	private String name;
-	//private String lastname;
-	//private String gender;
+	private String lastname;
+	private String gender;
 	
 	public RegisterDTO() {}
 
@@ -34,21 +34,22 @@ public class RegisterDTO {
 		this.name = name;
 	}
 
-	/*public String getLastname() {
+
+	public String getLastname() {
 		return lastname;
 	}
 
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
-	}*/
+	}
 
-	/*public String getGender() {
+	public String getGender() {
 		return gender;
 	}
 
 	public void setGender(String gender) {
 		this.gender = gender;
-	}*/
+	}
 	
 	
 

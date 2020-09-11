@@ -70,8 +70,7 @@ public class UserService {
 	}
 	
 	public void register(RegisterDTO register) {
-		//userDAO.addUser(new Guest(register.getUsername(), register.getPassword(), register.getName(), register.getLastname(), Gender.valueOf(register.getGender()), Role.GUEST));
-		userDAO.addUser(new Guest(register.getUsername(), register.getPassword(), register.getName(), "aaa", Gender.MALE, Role.GUEST));
+		userDAO.addUser(new Guest(register.getUsername(), register.getPassword(), register.getName(), register.getLastname(), Gender.valueOf(register.getGender()), Role.GUEST));
 	}
 	
 	public User updateUser(User user) {
@@ -100,8 +99,8 @@ public class UserService {
 		return true;
 	}
 	
-	public List<Guest> getMyApartmentsGuestHistory(Host host) {
-		List<Guest> retVal = new ArrayList<>();
+	public List<User> getMyApartmentsGuestHistory(Host host) {
+		List<User> retVal = new ArrayList<>();
 		List<String> guestHistoryUsernames= new ArrayList<>();
 		
 		List<Apartment> myApartments = host.getApartmentsToRent();
@@ -114,7 +113,7 @@ public class UserService {
 		}
 		
 		for(String username : guestHistoryUsernames) {
-			retVal.add((Guest) this.getUser(username));
+			retVal.add(this.getUser(username));
 		}
 		
 		return retVal;

@@ -1,21 +1,7 @@
 setUpMenu();
 
 
-//onload event za loadovanje Home stranice
-function load() {
-	
 
-		
-	$.ajax({
-		url:"../ProjectWeb/rest/users/all",
-		method: "GET",
-		dataType : "json"
-	}).success(function(data) {
-			
-		console.log(data);
-	});
-		
-}
 
 
 
@@ -27,7 +13,7 @@ function logout() {
 		method: "POST"
 	}).success(function(data) {	
 		console.log(data);
-		setUpMenu();
+		window.location.href = "http://localhost:8080/ProjectWeb/Home.html";
 	});
 		
 }
@@ -42,21 +28,25 @@ function setUpMenu() {
 		console.log(data);
 		if(data == "") {
 			$("#profileId").hide();
+			$("#userViewId").hide();
 			$("#logoutId").hide();
 			$("#registerId").show();
 			$("#loginId").show();
 		} else if(data === "ADMIN") {
 			$("#profileId").show();
+			$("#userViewId").show();
 			$("#logoutId").show();
 			$("#registerId").hide();
 			$("#loginId").hide();
 		}else if(data === "HOST") {
 			$("#profileId").show();
+			$("#userViewId").show();
 			$("#logoutId").show();
 			$("#registerId").hide();
 			$("#loginId").hide();
 		}else {
 			$("#profileId").show();
+			$("#userViewId").hide();
 			$("#logoutId").show();
 			$("#registerId").hide();
 			$("#loginId").hide();

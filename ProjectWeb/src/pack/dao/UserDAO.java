@@ -90,7 +90,7 @@ public class UserDAO {
 	
 	public User updateUser(User user) {
 		User toUpdate = this.getUser(user.getUsername());
-		toUpdate.setGender(user.getGender());
+		//toUpdate.setGender(user.getGender());
 		toUpdate.setLastname(user.getLastname());
 		toUpdate.setName(user.getName());
 		toUpdate.setPassword(user.getPassword());
