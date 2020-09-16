@@ -25,6 +25,10 @@ public class UserService {
 		this.amenityDAO = new AmenityDAO(path);
 	}
 	
+	public UserService() {
+		
+	}
+	
 	public List<User> getAllUsers() {
 		return userDAO.getAllUsers();
 	}

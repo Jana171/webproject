@@ -19,6 +19,7 @@ import pack.model.Guest;
 import pack.model.Host;
 import pack.model.Reservation;
 import pack.model.User;
+import pack.service.UserService;
 
 public class ReservationDAO {
 	
@@ -102,6 +103,15 @@ public class ReservationDAO {
 			Random random = new Random();
 			int id = random.nextInt();
 			reservation.setId((long) id);
+			int flag = -1;
+			for (int i=0; i< reservations.size(); i++) {
+				if(reservations.get(i).getId() == reservation.getId()) {
+					flag = i;
+				}
+			}
+			if(flag != -1) {
+				reservations.remove(flag);
+			}
 			reservations.add(reservation);
 			reservationsArray.add(reservationJSON);
 
@@ -144,7 +154,7 @@ public class ReservationDAO {
 				}
 			}
 		}
-		
+		addReservation(a);
 		return a;
 	}
 	
@@ -194,10 +204,13 @@ public class ReservationDAO {
 				Long apartmentId = (Long) reservationJSON.get("apartmentId");
 				Apartment apartment = new Apartment();
 				apartment.setId(apartmentId);
+				
 
 				String guestUusername = (String) reservationJSON.get("guest");
 				Guest guest = new Guest();
 				guest.setUsername(guestUusername);
+				
+				
 				
 				String statusStr = (String) reservationJSON.get("status");
 				ReservationStatus status = ReservationStatus.valueOf(statusStr);
@@ -218,11 +231,10 @@ public class ReservationDAO {
 			System.out.println("Nije nasao fajl");
 			e.printStackTrace();
 		} catch (Exception e) {
-			System.out.println("Vrv pars exception");
+			System.out.println("Parse exception");
 			e.printStackTrace();
 		}
 		
-		System.out.println("Ucitana vozila");
 	}
 
 }
