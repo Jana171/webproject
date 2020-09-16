@@ -39,34 +39,76 @@
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon1">@</span>
   </div>
-  <input id="usernameId" type="text" class="form-control" placeholder="Username" aria-label="Username" disabled aria-describedby="basic-addon1">
+  <input id="amenityName" type="text" class="form-control" placeholder="Amenity Name" aria-label="Name" aria-describedby="basic-addon1">
 </div>
 
-<div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="basic-addon1">@</span>
-  </div>
-  <input id="passwordId" type="text" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
-</div>
 
-<div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="basic-addon1">@</span>
-  </div>
-  <input id="nameId" type="text" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1">
-</div>
 
-<div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="basic-addon1">@</span>
-  </div>
-  <input id="lastnameId" type="text" class="form-control" placeholder="Lastname" aria-label="Lastname" aria-describedby="basic-addon1">
-</div>
 
-<button class="btn btn-primary" onclick="update()">Update</button>
+
+
+<button class="btn btn-primary" onclick="editAmenity()">Update Amenity</button>
 </body>
 
 <script type="text/javascript" src="js/Global.js"></script>
-<script type="text/javascript" src="js/Profile.js"></script>
+<script type="text/javascript" src="js/Amenities.js"></script>
+
+
+<script>
+
+	var amenityId = "";
+	var amenityDeleted = false;
+
+	$(document).ready(function() {
+		
+		amenityId = getParams(window.location.href).id;
+		
+		$.ajax({
+			type: "GET",
+			url: "rest/users/amenities/" + amenityId,
+			dataType: "json",
+			success: function(amenity) {
+				$("#amenityName").val(amenity.title);
+				amenityDeleted = amenity.deleted;
+			},
+			error: function() {
+				alert("Something went wrong while getting Amenity with id=" + amenityId);
+			}
+		})
+		
+	})
+	
+	function editAmenity() {
+		var amenity = {};
+		amenity.id = amenityId;
+		amenity.deleted = amenityDeleted;
+		amenity.title = $("#amenityName").val();
+		
+		if (amenity.title == "") {
+			alert("Amenity Name cannot be blank!");
+			return;
+		}
+		
+		$.ajax({
+			type: "PUT",
+			url: "rest/users/amenities",
+			data: JSON.stringify(amenity),
+			contentType: "application/json",
+			success: function() {
+				alert("Amenity updated!");
+				window.location.reload();
+			},
+			error: function() {
+				alert("Something went wrong while updating amenity!");
+				window.location.reload();
+			}
+		})
+		
+	}
+	
+
+
+</script>
+
 
 </html>

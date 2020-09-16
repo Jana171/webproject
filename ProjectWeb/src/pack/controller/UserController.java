@@ -248,8 +248,8 @@ public class UserController {
 	
 	@DELETE
 	@Path("/amenities/{id}")
-	public void deleteAmenity(@PathParam("id") int id) {
-		this.getAmenityService().deleteAmenity(id,getApartmentService().apartmentDAO);
+	public boolean deleteAmenity(@PathParam("id") int id) {
+		return this.getAmenityService().deleteAmenity(id,getApartmentService().apartmentDAO);
 	}
 	
 }

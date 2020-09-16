@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -38,6 +39,9 @@ public class AmenityDAO {
 	}
 	
 	public boolean addAmenity(Amenity amenity) {
+		Random random = new Random();
+		int id = random.nextInt();
+		amenity.setId(id);
 		this.amenities.add(amenity);
 		this.saveAmenity(amenity);
 		return true;
@@ -81,10 +85,12 @@ public class AmenityDAO {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void deleteAmenity(int id) {
+	public boolean deleteAmenity(int id) {
+		boolean flag = false;
 		for(int i = 0 ; i < this.amenities.size();i++) {
 			if(this.amenities.get(i).getId() == id) {
 				this.amenities.remove(i);
+				flag = true;
 				break;
 			}
 		}
@@ -112,6 +118,8 @@ public class AmenityDAO {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}	
+		
+		return true;
 	}
 	
 	public void loadAmenities() {

@@ -1,11 +1,16 @@
 package pack.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import pack.dao.AmenityDAO;
 import pack.dao.ApartmentDAO;
 import pack.dao.UserDAO;
+import pack.dto.ApartmentDTO;
 import pack.enums.Role;
+import pack.model.Amenity;
 import pack.model.Apartment;
 import pack.model.Comment;
 import pack.model.Host;
@@ -25,8 +30,35 @@ public class ApartmentService {
 		return apartmentDAO.getAllApartments();
 	}
 	
-	public boolean addApartment(Apartment apartment, UserDAO userDAO) {
-		Host host = (Host) userDAO.getUser(apartment.getHost().getUsername());
+	public boolean addApartment(ApartmentDTO apartmentDTO, Host host, AmenityDAO amenityDAO) {
+		
+		Apartment apartment = new Apartment();
+		apartment.setActive(false);
+		apartment.setHost(host);
+		apartment.setName(apartmentDTO.getName());
+		apartment.setLocation(apartmentDTO.getLocation());
+		apartment.setNumberOfGuests(apartmentDTO.getNumberOfGuests());
+		apartment.setNumberOfRooms(apartmentDTO.getNumberOfRooms());
+		apartment.setPriceForNight(apartmentDTO.getPriceForNight());
+		apartment.setTimeForCheckIn(apartmentDTO.getTimeForCheckIn());
+		apartment.setTimeForCheckOut(apartmentDTO.getTimeForCheckOut());
+		apartment.setType(apartmentDTO.getType());
+		List<Amenity> amenities = new ArrayList<Amenity>();
+		for (int amenityId : apartmentDTO.getAmenities()) {
+			amenities.add(amenityDAO.getAmenity(amenityId));
+		}
+		apartment.setAmenities(amenities);
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		
+		List<LocalDate> available = new ArrayList<LocalDate>();
+		for (String s : apartmentDTO.getAvailableDates()) {
+			available.add(LocalDate.parse(s, dtf));
+		}
+		
+		apartment.setAvailableDates(available);
+		apartment.setDatesForRent(available);
+		
+		
 		host.getApartmentsToRent().add(apartment);
 		return apartmentDAO.addApartment(apartment);
 	}
@@ -67,6 +99,23 @@ public class ApartmentService {
 		Apartment apartment = apartmentDAO.getApartment(comment.getApartment().getId());
 		apartment.getComments().add(comment);
 		return true;
+	}
+
+
+	public Apartment getApartment(int id) {
+		return this.apartmentDAO.getApartment((long) id);
+		
+	}
+
+
+	public boolean deleteApartment(int id,UserDAO userDAO) {
+		return this.apartmentDAO.deleteApartment(id,userDAO);
+		
+	}
+
+
+	public Apartment updateApartment(Apartment apartment, UserDAO userDAO) {
+		return this.apartmentDAO.updateApartment(apartment,userDAO);
 	}
 	
 

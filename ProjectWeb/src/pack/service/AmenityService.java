@@ -42,7 +42,7 @@ public class AmenityService {
 		return retVal;
 	}
 	 
-	public void deleteAmenity(int id, ApartmentDAO apartmentDAO) {
+	public boolean deleteAmenity(int id, ApartmentDAO apartmentDAO) {
 		List<Apartment> apartments = apartmentDAO.getAllApartments();
 		for(Apartment a: apartments) {
 			for(int i = 0 ; i < a.getAmenities().size(); i++) {
@@ -51,7 +51,7 @@ public class AmenityService {
 				}
 			}
 		}
-		this.amenityDAO.deleteAmenity(id);
+		return this.amenityDAO.deleteAmenity(id);
 	}
 	
 	

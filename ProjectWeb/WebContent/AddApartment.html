@@ -35,15 +35,13 @@
   </div>
 </nav>
 
-<label>Apartment Name</label>
 <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon1">@</span>
   </div>
-  <input id="apartmentName" type="text" class="form-control" placeholder="Apartment Name" aria-label="Name" disabled aria-describedby="basic-addon1">
+  <input id="apartmentName" type="text" class="form-control" placeholder="Apartment Name" aria-label="Name" aria-describedby="basic-addon1">
 </div>
 
-<label>Apartment Type</label>
 <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon1">@</span>
@@ -54,7 +52,6 @@
   </select>
 </div>
 
-<label>Number of rooms</label>
 <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon1">@</span>
@@ -62,7 +59,6 @@
   <input id="numberOfRooms" type="number" class="form-control" placeholder="Number of rooms" aria-label="Number of rooms" aria-describedby="basic-addon1">
 </div>
 
-<label>Number of guests</label>
 <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon1">@</span>
@@ -70,7 +66,6 @@
   <input id="numberOfGuests" type="number" class="form-control" placeholder="Number of guests" aria-label="Number of guests" aria-describedby="basic-addon1">
 </div>
 
-<label>Price for 1 night</label>
 <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon1">@</span>
@@ -78,7 +73,6 @@
   <input id="price" type="number" class="form-control" placeholder="Price for night" aria-label="Price for night" aria-describedby="basic-addon1">
 </div>
 
-<label>Check In Time</label>
 <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon1">@</span>
@@ -86,7 +80,6 @@
   <input id="checkIn" type="number" class="form-control" placeholder="Check In time" aria-label="Check In" aria-describedby="basic-addon1">
 </div>
 
-<label>Check Out Time</label>
 <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon1">@</span>
@@ -94,7 +87,6 @@
   <input id="checkOut" type="number" class="form-control" placeholder="Check Out time" aria-label="Check Out" aria-describedby="basic-addon1">
 </div>
 
-<label>City</label>
 <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon1">@</span>
@@ -102,7 +94,6 @@
   <input id="city" type="text" class="form-control" placeholder="City" aria-label="City" aria-describedby="basic-addon1">
 </div>
 
-<label>Street</label>
 <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon1">@</span>
@@ -110,15 +101,13 @@
   <input id="street" type="text" class="form-control" placeholder="Street" aria-label="Street" aria-describedby="basic-addon1">
 </div>
 
-<label>Postal Code</label>
 <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon1">@</span>
   </div>
-  <input id="postalCode" type="text" class="form-control" placeholder="Postal Code" aria-label="Postal Code" aria-describedby="basic-addon1">
+  <input id="postalCode" type="number" class="form-control" placeholder="postalCode" aria-label="Postal Code" aria-describedby="basic-addon1">
 </div>
 
-<label>Longitude</label>
 <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon1">@</span>
@@ -126,7 +115,6 @@
   <input id="longitude" type="number" class="form-control" placeholder="Longitude" aria-label="Longitude" aria-describedby="basic-addon1">
 </div>
 
-<label>Latitude</label>
 <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon1">@</span>
@@ -134,44 +122,52 @@
   <input id="latitude" type="number" class="form-control" placeholder="Latitude" aria-label="Latitude" aria-describedby="basic-addon1">
 </div>
 
-<button class="btn btn-primary" onclick="updateApartment()">Update</button>
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon1">@</span>
+  </div>
+  <select name="amenities" id="amenities" class="form-control" aria-label="Amenities" aria-describedby="basic-addon1" multiple>
+  	
+  </select>
+</div>
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon1">@</span>
+  </div>
+  <input id="dates" type="text" class="form-control" placeholder="Choose dates [dd/MM/yyyy] with whitespace between them" aria-label="dates" aria-describedby="basic-addon1">
+</div>
+
+
+<button class="btn btn-primary" onclick="addApartment()">Update</button>
 </body>
 
 <script type="text/javascript" src="js/Global.js"></script>
 <script>
 
-var apartmentId = ""
-	
 	$(document).ready(function() {
-		
-		apartmentId = getParams(window.location.href).id;
-		
 		$.ajax({
 			type: "GET",
-			url: "rest/apartments/" + apartmentId,
+			url: "rest/users/amenities",
 			dataType: "json",
-			success: function(apartment) {
-				$("#apartmentName").val(apartment.name);
-				$("#apartmentType").val(apartment.type);
-				$("#numberOfRooms").val(apartment.numberOfRooms);
-				$("#numberOfGuests").val(apartment.numberOfGuests);
-				$("#price").val(apartment.priceForNight);
-				$("#checkIn").val(apartment.timeForCheckIn);
-				$("#checkOut").val(apartment.timeForCheckOut);
-
-				$("#street").val(apartment.location.address.street);
-				$("#city").val(apartment.location.address.city);
-				$("#postalCode").val(apartment.location.address.number);
-				$("#longitude").val(apartment.location.longitude);
-				$("#latitude").val(apartment.location.latitude);
+			success: function(amenities) {
+				var options = "";
+				$.each(amenities, function(i, amenity) {
+					var option = "";
+					option += '<option value="' + amenity.id + '">' + amenity.title + '</option>';
+					options += option;
+				})
 				
-				// setuj selektovane amenities
+				$("#amenities").empty();
+				$("#amenities").append(options);
+			},
+			error: function() {
+				alert("Error while getting amenities from backend app");
 			}
-			
 		})
 	})
-
-	function updateApartment() {
+	
+	function addApartment() {
 		var apartment = {};
 		apartment.name = $("#apartmentName").val();
 		apartment.type = $("#apartmentType").val();
@@ -196,15 +192,37 @@ var apartmentId = ""
 		
 		apartment.amenities = amenityIds;
 		
+		var dates = $("#dates").val();
+		
+		var datesForDto = [];
+		
+		$.each(dates.split(" "), function(i, date) {
+			datesForDto.push(date);
+		})
+		
+		apartment.availableDates = datesForDto;
+		
 		if (apartment.name == "" || apartment.numberOfRooms == "" || apartment.numberOfGuests == "" ||
 				apartment.priceForNight == "" || apartment.timeForCheckIn == "" || apartment.timeForCheckOut == "" ||
 				address.street == "" || address.city == "" || address.number == "" || location.longitude == "" ||
-				location.latitude == "") {
+				location.latitude == "" || datesForDto == "") {
 			alert("Please fill in the form!");
 			return;
 		}
 		
-		// pozovi add
+		
+		$.ajax({
+			type: "POST",
+			url: "rest/apartments",
+			data: JSON.stringify(apartment),
+			contentType: "application/json",
+			success: function() {
+				alert("Uspesno dodato");
+			},
+			error: function() {
+				alert("Greska prilikom dodavanja apartmana.");
+			}
+		})
 		
 	}
 

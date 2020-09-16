@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import pack.dto.ApartmentDTO;
 import pack.enums.ApartmentType;
 
 public class Apartment {
@@ -48,6 +49,22 @@ public class Apartment {
 		this.host = host;
 		this.id = id;
 		this.name = name;
+	}
+	
+	public Apartment(ApartmentDTO dto) {
+		this.type = dto.getType();
+		this.numberOfGuests = dto.getNumberOfGuests();
+		this.numberOfRooms = dto.getNumberOfRooms();
+		this.priceForNight = dto.getPriceForNight();
+		this.timeForCheckIn = dto.getTimeForCheckIn();
+		this.timeForCheckOut = dto.getTimeForCheckOut();
+		this.active = false;
+		this.location = dto.getLocation();
+		this.name = dto.getName();
+		
+		
+		
+		
 	}
 
 	public ApartmentType getType() {

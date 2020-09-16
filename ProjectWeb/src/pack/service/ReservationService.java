@@ -5,6 +5,7 @@ import java.util.List;
 
 import pack.dao.ApartmentDAO;
 import pack.dao.ReservationDAO;
+import pack.dao.UserDAO;
 import pack.enums.ReservationStatus;
 import pack.enums.Role;
 import pack.model.Apartment;
@@ -71,6 +72,21 @@ public class ReservationService {
 		}
 		
 		return false;
+	}
+
+
+	public Reservation changeStatusReservation(Reservation reservation, UserDAO userDAO, ApartmentDAO apartmentDAO) {
+		return this.reservationDAO.changeStatusReservation(reservation, userDAO, apartmentDAO);
+	}
+
+
+	public Reservation getReservation(int id) {
+		return this.reservationDAO.getReservation((long) id);
+	}
+
+
+	public boolean deleteReservation(int id, UserDAO userDAO, ApartmentDAO apartmentDAO) {
+		return this.reservationDAO.deleteReservation(id, userDAO, apartmentDAO);
 	}
 	
 	

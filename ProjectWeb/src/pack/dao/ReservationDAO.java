@@ -6,15 +6,19 @@ import java.io.FileWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import pack.enums.ReservationStatus;
+import pack.enums.Role;
 import pack.model.Apartment;
 import pack.model.Guest;
+import pack.model.Host;
 import pack.model.Reservation;
+import pack.model.User;
 
 public class ReservationDAO {
 	
@@ -50,18 +54,7 @@ public class ReservationDAO {
 		return null;
 	}
 	
-	//kako ovo radi
-	/*@SuppressWarnings("unlikely-arg-type")
-	public List<Apartment> getGuestRentedApartmentsIds(String username) {
-		List<Apartment> retVal = new ArrayList<Apartment>();
-		
-		for(Reservation r : this.reservations) {
-			if(r.getGuest().getUsername().equals(username) && !retVal.contains(r.getApartment().getId())) {
-				retVal.add(r.getApartment());
-			}
-		}
-		return retVal;
-	}*/
+	
 	public List<Long> getGuestRentedApartmentsIds(String username) {
 		List<Long> retVal = new ArrayList<Long>();
 		
@@ -106,6 +99,9 @@ public class ReservationDAO {
 			reservationJSON.put("numberOfOvernightsStay",reservation.getNumberOfOvernightsStay());
 			reservationJSON.put("id",reservation.getId());
 			
+			Random random = new Random();
+			int id = random.nextInt();
+			reservation.setId((long) id);
 			reservations.add(reservation);
 			reservationsArray.add(reservationJSON);
 
@@ -123,12 +119,65 @@ public class ReservationDAO {
 		
 	}
 	
-	public void updateReservation() {
+	
+	
+	public Reservation changeStatusReservation(Reservation reservation, UserDAO userDAO, ApartmentDAO apartmentDAO) {
+		Reservation a = this.getReservation(reservation.getId());
+		a.setStatus(reservation.getStatus());
 		
+		for(User user : userDAO.getAllUsers()) {
+			if(user.getRole() == Role.GUEST) {
+				for(Reservation res: ((Guest)user).getReservations()) {
+					if(res.getId() == reservation.getId()) {
+						res.setStatus(reservation.getStatus());
+					}
+				}
+			}
+		}
+		
+		for(Apartment ap : apartmentDAO.getAllApartments()) {
+			if(ap.getId() == a.getApartment().getId()) {
+				for(Reservation res: ap.getReservations()) {
+					if(res.getId() == reservation.getId()) {
+						res.setStatus(reservation.getStatus());
+					}
+				}
+			}
+		}
+		
+		return a;
 	}
 	
-	public void deleteReservation() {
+	public boolean deleteReservation(int id, UserDAO userDAO, ApartmentDAO apartmentDAO) {
+		boolean flag = false;
+		Reservation a = this.getReservation((long) id);
+		for(int i = 0 ; i < this.reservations.size();i++) {
+			if(this.reservations.get(i).getId() == id) {
+				this.reservations.remove(i);
+				flag = true;
+				break;
+			}
+		}
 		
+		
+		for(User user : userDAO.getAllUsers()) {
+			if(user.getRole() == Role.GUEST) {
+				for(int i = 0 ; i < ((Guest)user).getReservations().size();i++ ) {
+					if(((Guest)user).getReservations().get(i).getId() == id) {
+						((Guest)user).getReservations().remove(i);
+					}
+				}
+			}
+		}
+		
+		/*
+		 * for(Apartment ap : apartmentDAO.getAllApartments()) { if(ap.getId() ==
+		 * reservation.getApartment().getId()) { for(Reservation res:
+		 * ap.getReservations()) { if(res.getId() == reservation.getId()) {
+		 * res.setStatus(reservation.getStatus()); } } } }
+		 */
+		
+		return flag;
 	}
 	
 	public void loadReservations() {

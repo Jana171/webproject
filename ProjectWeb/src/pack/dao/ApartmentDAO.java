@@ -6,17 +6,20 @@ import java.io.FileWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import pack.enums.ApartmentType;
+import pack.enums.Role;
 import pack.model.Address;
 import pack.model.Amenity;
 import pack.model.Apartment;
 import pack.model.Host;
 import pack.model.Location;
+import pack.model.User;
 
 public class ApartmentDAO {
 	
@@ -67,17 +70,66 @@ public class ApartmentDAO {
 	
 	
 	public boolean addApartment(Apartment apartment) {
+		Random random = new Random();
+		int id = random.nextInt();
+		apartment.setId((long) id);
 		apartments.add(apartment);
 		this.saveApartment(apartment);
 		return true;
 	}
 	
-	public void updateApartment() {
+	public Apartment updateApartment(Apartment apartment, UserDAO userDAO) {
+		Apartment a = this.getApartment(apartment.getId());
+		a.setActive(apartment.isActive());
+		a.setLocation(apartment.getLocation());
+		a.setName(apartment.getName());
+		a.setNumberOfGuests(apartment.getNumberOfGuests());
+		a.setNumberOfRooms(apartment.getNumberOfRooms());
+		a.setPriceForNight(apartment.getPriceForNight());
+		a.setTimeForCheckIn(apartment.getTimeForCheckIn());
+		a.setTimeForCheckOut(apartment.getTimeForCheckOut());
+		a.setType(apartment.getType());
+		
+		for(User user : userDAO.getAllUsers()) {
+			if(user.getRole() == Role.HOST) {
+				for(Apartment ap: ((Host)user).getApartmentsToRent()) {
+					if(ap.getId() == apartment.getId()) {
+						ap.setActive(apartment.isActive());
+						ap.setLocation(apartment.getLocation());
+						ap.setName(apartment.getName());
+						ap.setNumberOfGuests(apartment.getNumberOfGuests());
+						ap.setNumberOfRooms(apartment.getNumberOfRooms());
+						ap.setPriceForNight(apartment.getPriceForNight());
+						ap.setTimeForCheckIn(apartment.getTimeForCheckIn());
+						ap.setTimeForCheckOut(apartment.getTimeForCheckOut());
+						ap.setType(apartment.getType());
+					}
+				}
+			}
+		}
+		
+		return a;
 		
 	}
 	
-	public void deleteApartment() {
-		
+	public boolean deleteApartment(int id, UserDAO userDAO) {
+		Apartment apartment = this.getApartment((long) id);
+		if(apartment == null) {
+			return false;
+		} else {
+			apartment.setDeleted(true);
+			for(User user : userDAO.getAllUsers()) {
+				if(user.getRole() == Role.HOST) {
+					for(Apartment a: ((Host)user).getApartmentsToRent()) {
+						if(a.getId() == id) {
+							a.setDeleted(true);
+						}
+					}
+				}
+			}
+			
+			return true;
+		}
 	}
 	
 	public void loadApartments() {

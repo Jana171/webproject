@@ -65,7 +65,7 @@ function load() {
 			dynamicHTML+="</td>";
 			dynamicHTML+="<td><a href=\"UpdateApartment.html?id=" + data[i].id + "\" >Update</a></td>";
 			dynamicHTML+="<td><a href=\"Apartment.html?id=" + data[i].id + "\" >Profile</a></td>";
-			dynamicHTML+="<td><button onclick=\"delete(" + data[i].id + ")\">Delete<button></td>";
+			dynamicHTML+="<td><button onclick=\"deleteApartment(" + data[i].id + ")\">Delete<button></td>";
 			
 			
 			dynamicHTML+="</tr>";
@@ -76,4 +76,24 @@ function load() {
 		$("#tab2").append(dynamicHTML);
 	});
 		
+}
+
+function redirectToAdd() {
+	window.location.replace("AddApartment.html");
+}
+
+function deleteApartment(id) {
+	$.ajax({
+		url: "rest/apartments/" + id,
+		type: "DELETE",
+		success: function() {
+			alert("Apartment is deleted!");
+			window.location.reload();
+		},
+		error: function() {
+			alert("Error during delete!");
+			window.location.reload();
+		}
+		
+	})
 }
