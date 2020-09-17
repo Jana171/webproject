@@ -43,24 +43,32 @@ function setUpMenu() {
 			$("#logoutId").hide();
 			$("#registerId").show();
 			$("#loginId").show();
+			$("#amenitiesId").hide();
+			$("#reservationsId").hide();
 		} else if(data === "ADMIN") {
 			$("#profileId").show();
 			$("#userViewId").show();
 			$("#logoutId").show();
 			$("#registerId").hide();
 			$("#loginId").hide();
+			$("#amenitiesId").show();
+			$("#reservationsId").show();
 		}else if(data === "HOST") {
 			$("#profileId").show();
-			$("#userViewId").show();
+			$("#userViewId").hide();
 			$("#logoutId").show();
 			$("#registerId").hide();
 			$("#loginId").hide();
+			$("#amenitiesId").hide();
+			$("#reservationsId").show();
 		}else {
 			$("#profileId").show();
 			$("#userViewId").hide();
 			$("#logoutId").show();
 			$("#registerId").hide();
 			$("#loginId").hide();
+			$("#amenitiesId").hide();
+			$("#reservationsId").show();
 		}
 		
 	});

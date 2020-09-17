@@ -95,7 +95,6 @@ public class CommentDAO {
 	public void loadComments() {
 		JSONParser jsonParser = new JSONParser();
 		String fullPath = path + "/res/db/comments.json";
-		System.out.println("Prava putanja ucitavanja: " + fullPath);
 		try {
 			
 			JSONArray comments = (JSONArray) jsonParser.parse(new FileReader(fullPath));	
@@ -132,6 +131,5 @@ public class CommentDAO {
 			e.printStackTrace();
 		}
 		
-		System.out.println("Ucitana vozila");
 	}
 }

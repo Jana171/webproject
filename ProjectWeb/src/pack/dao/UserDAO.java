@@ -59,7 +59,6 @@ public class UserDAO {
 	public void saveUser(User user) {
 		JSONParser jsonParser = new JSONParser();
 		String fullPath = path + "/res/db/users.json";
-		System.out.println("Prava putanja: " + fullPath);
 		try {
 			
 			JSONArray usersArray = (JSONArray) jsonParser.parse(new FileReader(fullPath));	

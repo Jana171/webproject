@@ -267,7 +267,6 @@ public class ReservationDAO {
 	public void loadReservations() {
 		JSONParser jsonParser = new JSONParser();
 		String fullPath = path + "/res/db/reservations.json";
-		System.out.println("Prava putanja ucitavanja: " + fullPath);
 		this.reservations.clear();
 		try {
 			System.out.println(fullPath);

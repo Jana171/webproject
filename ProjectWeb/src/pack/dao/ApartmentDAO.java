@@ -134,7 +134,6 @@ public class ApartmentDAO {
 	public void loadApartments() {
 		JSONParser jsonParser = new JSONParser();
 		String fullPath = path + "/res/db/apartments.json";
-		System.out.println("Prava putanja ucitavanja: " + fullPath);
 		try {
 			
 			JSONArray apartments = (JSONArray) jsonParser.parse(new FileReader(fullPath));	
@@ -225,7 +224,7 @@ public class ApartmentDAO {
 			e.printStackTrace();
 		}
 		
-		System.out.println("Ucitana vozila");
+
 	}
 	
 	@SuppressWarnings("unchecked")

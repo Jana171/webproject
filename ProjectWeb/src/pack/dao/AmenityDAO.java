@@ -125,7 +125,6 @@ public class AmenityDAO {
 	public void loadAmenities() {
 		JSONParser jsonParser = new JSONParser();
 		String fullPath = path + "/res/db/amenities.json";
-		System.out.println("Prava putanja ucitavanja: " + fullPath);
 		try {
 			
 			JSONArray amenities = (JSONArray) jsonParser.parse(new FileReader(fullPath));	
@@ -153,7 +152,7 @@ public class AmenityDAO {
 			e.printStackTrace();
 		}
 		
-		System.out.println("Ucitana vozila");
+
 	}
 	
 	@SuppressWarnings("unchecked")
