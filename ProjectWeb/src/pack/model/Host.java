@@ -3,11 +3,13 @@ package pack.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import pack.enums.Gender;
 import pack.enums.Role;
 
 public class Host extends User{
-	
+	@JsonBackReference
 	private List<Apartment> apartmentsToRent = new ArrayList<Apartment>();
 	
 	public Host() {}

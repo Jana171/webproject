@@ -140,7 +140,8 @@
 <script type="text/javascript" src="js/Global.js"></script>
 <script>
 
-var apartmentId = ""
+var apartmentId = "";
+var statusTemp = "";
 	
 	$(document).ready(function() {
 		
@@ -164,6 +165,7 @@ var apartmentId = ""
 				$("#postalCode").val(apartment.location.address.number);
 				$("#longitude").val(apartment.location.longitude);
 				$("#latitude").val(apartment.location.latitude);
+				statusTemp = apartment.active;
 				
 				// setuj selektovane amenities
 			}
@@ -180,6 +182,8 @@ var apartmentId = ""
 		apartment.priceForNight = $("#price").val();
 		apartment.timeForCheckIn = $("#checkIn").val();
 		apartment.timeForCheckOut = $("#checkOut").val();
+		apartment.active = statusTemp; 
+		apartment.id = apartmentId;
 		
 		var location = {};
 		var address = {};
@@ -189,7 +193,6 @@ var apartmentId = ""
 		location.address = address;
 		location.longitude = $("#longitude").val();
 		location.latitude = $("#latitude").val();
-		apartment.location = location;
 		apartment.location = location;
 		
 		amenityIds = $("#amenities").val();
@@ -204,7 +207,21 @@ var apartmentId = ""
 			return;
 		}
 		
-		// pozovi add
+		$.ajax({
+			url:"rest/apartments",
+			method: "PUT",
+			contentType: "application/json",
+			dataType: "json",
+			data: JSON.stringify(apartment),
+			success:function(apartment){
+				alert("Apartment successfuly updated!");
+				window.location.reload();
+			},
+			error:function(){
+				alert("Something went wrong!");
+				window.location.reload();
+			}
+		});
 		
 	}
 

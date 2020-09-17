@@ -37,6 +37,7 @@ function update() {
 	    },
 		data:newUser
 	}).success(function(data) {
+		alert("Profile updated!");
 		$("#usernameId").val(data.username);
 		$("#nameId").val(data.name);
 		$("#lastnameId").val(data.lastname);

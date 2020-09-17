@@ -16,15 +16,13 @@ import pack.enums.ReservationStatus;
 import pack.enums.Role;
 import pack.model.Apartment;
 import pack.model.Guest;
-import pack.model.Host;
 import pack.model.Reservation;
 import pack.model.User;
-import pack.service.UserService;
 
 public class ReservationDAO {
 	
 	private String path;
-	private List<Reservation> reservations = new ArrayList<Reservation>();
+	private static List<Reservation> reservations = new ArrayList<Reservation>();
 	
 	public ReservationDAO(String path) {
 		this.path = path;
@@ -36,7 +34,7 @@ public class ReservationDAO {
 	public List<Reservation> getGuestReservations(String username) {
 		List<Reservation> retVal = new ArrayList<Reservation>();
 		
-		for(Reservation r : this.reservations) {
+		for(Reservation r : ReservationDAO.reservations) {
 			if(r.getGuest().getUsername().equals(username)) {
 				retVal.add(r);
 			}
@@ -46,7 +44,7 @@ public class ReservationDAO {
 	
 	public Reservation getReservation(Long id) {
 		
-		for(Reservation r : this.reservations) {
+		for(Reservation r : ReservationDAO.reservations) {
 			if(r.getId() == id) {
 				return r;
 			}
@@ -91,6 +89,14 @@ public class ReservationDAO {
 			JSONArray reservationsArray = (JSONArray) jsonParser.parse(new FileReader(fullPath));	
 			
 			JSONObject reservationJSON = new JSONObject();
+			
+			
+			if(reservation.getId() == null) {
+				int newId = reservations.size() + 1;
+				reservation.setId((long) newId);
+			}
+			
+			
 			reservationJSON.put("startDate", reservation.getStartDate());
 			reservationJSON.put("guest", reservation.getGuest().getUsername());
 			reservationJSON.put("apartmentId",reservation.getApartment().getId());
@@ -100,9 +106,9 @@ public class ReservationDAO {
 			reservationJSON.put("numberOfOvernightsStay",reservation.getNumberOfOvernightsStay());
 			reservationJSON.put("id",reservation.getId());
 			
-			Random random = new Random();
-			int id = random.nextInt();
-			reservation.setId((long) id);
+			//Random random = new Random();
+			//int id = random.nextInt();
+	
 			int flag = -1;
 			for (int i=0; i< reservations.size(); i++) {
 				if(reservations.get(i).getId() == reservation.getId()) {
@@ -123,7 +129,7 @@ public class ReservationDAO {
 			System.out.println("Nije nasao fajl");
 			e.printStackTrace();
 		} catch (Exception e) {
-			System.out.println("Vrv pars exception");
+			System.out.println("Parse exception!");
 			e.printStackTrace();
 		}
 		
@@ -132,8 +138,8 @@ public class ReservationDAO {
 	
 	
 	public Reservation changeStatusReservation(Reservation reservation, UserDAO userDAO, ApartmentDAO apartmentDAO) {
-		Reservation a = this.getReservation(reservation.getId());
-		a.setStatus(reservation.getStatus());
+		Reservation r = this.getReservation(reservation.getId());
+		r.setStatus(reservation.getStatus());
 		
 		for(User user : userDAO.getAllUsers()) {
 			if(user.getRole() == Role.GUEST) {
@@ -146,7 +152,7 @@ public class ReservationDAO {
 		}
 		
 		for(Apartment ap : apartmentDAO.getAllApartments()) {
-			if(ap.getId() == a.getApartment().getId()) {
+			if(ap.getId() == r.getApartment().getId()) {
 				for(Reservation res: ap.getReservations()) {
 					if(res.getId() == reservation.getId()) {
 						res.setStatus(reservation.getStatus());
@@ -154,8 +160,8 @@ public class ReservationDAO {
 				}
 			}
 		}
-		addReservation(a);
-		return a;
+		addReservation(r);
+		return r;
 	}
 	
 	public boolean deleteReservation(int id, UserDAO userDAO, ApartmentDAO apartmentDAO) {
@@ -189,6 +195,7 @@ public class ReservationDAO {
 		
 		return flag;
 	}
+
 	
 	public void loadReservations() {
 		JSONParser jsonParser = new JSONParser();

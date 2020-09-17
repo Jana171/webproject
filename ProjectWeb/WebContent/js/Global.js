@@ -24,7 +24,7 @@ function logout() {
 		method: "POST"
 	}).success(function(data) {	
 		console.log(data);
-		window.location.href = "http://localhost:8080/ProjectWeb/Home.html";
+		window.location.replace("Login.html");
 	});
 		
 }

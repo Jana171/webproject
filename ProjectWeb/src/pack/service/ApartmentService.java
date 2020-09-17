@@ -70,7 +70,7 @@ public class ApartmentService {
 		//neregistrovani
 		if(user == null || user.getRole() == Role.GUEST) {
 			for(Apartment apartment : allApartments) {
-				if(apartment.isActive()) {
+				if(apartment.isActive() && !apartment.isDeleted()) {
 					retVal.add(apartment);
 				}
 			}
@@ -78,7 +78,7 @@ public class ApartmentService {
 			return allApartments;
 		} else {
 			for(Apartment apartment : allApartments) {
-				if(apartment.getHost().getUsername().equals(user.getUsername())) {
+				if(apartment.getHost().getUsername().equals(user.getUsername()) && !apartment.isDeleted()) {
 					retVal.add(apartment);
 				}
 			}

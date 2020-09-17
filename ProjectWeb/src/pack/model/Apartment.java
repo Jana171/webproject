@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import pack.dto.ApartmentDTO;
 import pack.enums.ApartmentType;
 
@@ -20,6 +22,7 @@ public class Apartment {
 	private boolean active;		//predstavlja status
 	
 	private Location location;
+	@JsonManagedReference
 	private Host host;
 	
 	private List<LocalDate> datesForRent = new ArrayList<LocalDate>();
