@@ -1,26 +1,9 @@
 load();
-/*
-$.ajax({
-	url:"../ProjectWeb/rest/users/role",
-	method: "GET",
-	dataType : "text"
-}).success(function(data) {
-	console.log(data);
-	if(data == "") {
-	
-	} else if(data === "ADMIN") {
-	}else if(data === "HOST") {
-		$("#profileId").show();
-	}else {
-		$("#profileId").show();
-	}
-	
-});
-	*/
+
 
 function load() {
 		
-	console.log("USA");
+	
 	$.ajax({
 		url:"../ProjectWeb/rest/apartments/all",
 		method: "GET",
@@ -79,9 +62,34 @@ function load() {
 		dynamicHTML+="</tbody>";
 		$("#tab2").empty();
 		$("#tab2").append(dynamicHTML);
+		
+		handleButtons();
 	});
 		
 }
+
+function handleButtons() {
+	$.ajax({
+		type: "GET",
+		url: "rest/users/role",
+		dataType: "text",
+		success: function(role) {
+			if (role == "") {
+				$( ":button" ).hide();
+			} else if (role == "ADMIN") {
+				$( ":button" ).show();
+			} else if (role == "HOST") {
+				$( ":button" ).show();
+			} else {
+				$( ":button" ).hide();
+			}
+		},
+		error: function() {
+			alert("Something went wrong while getting logged user");
+		}
+	})
+}
+
 
 function apartmentView(id) {
 	window.location.replace("UpdateApartment.html?id=" + id);

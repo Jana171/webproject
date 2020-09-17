@@ -45,6 +45,9 @@ function setUpMenu() {
 			$("#loginId").show();
 			$("#amenitiesId").hide();
 			$("#reservationsId").hide();
+			
+			// buttons
+			$("#makeReservation").hide();
 		} else if(data === "ADMIN") {
 			$("#profileId").show();
 			$("#userViewId").show();
@@ -53,6 +56,9 @@ function setUpMenu() {
 			$("#loginId").hide();
 			$("#amenitiesId").show();
 			$("#reservationsId").show();
+			
+			// buttons
+			$("#makeReservation").hide();
 		}else if(data === "HOST") {
 			$("#profileId").show();
 			$("#userViewId").hide();
@@ -61,6 +67,9 @@ function setUpMenu() {
 			$("#loginId").hide();
 			$("#amenitiesId").hide();
 			$("#reservationsId").show();
+			
+			//buttons
+			$("#makeReservation").hide();
 		}else {
 			$("#profileId").show();
 			$("#userViewId").hide();
@@ -69,6 +78,9 @@ function setUpMenu() {
 			$("#loginId").hide();
 			$("#amenitiesId").hide();
 			$("#reservationsId").show();
+			
+			//buttons
+			$("#makeReservation").show();
 		}
 		
 	});

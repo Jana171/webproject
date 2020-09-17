@@ -47,9 +47,10 @@
   </div>
 </nav>
 
-<button id="makeReservation" onclick="reservationRedirect()">Make Reservation</button>
+
 <div class="container">
     <table id="reservationsTable" class="table table-striped"></table>
+    <button class="btn btn-primary" id="makeReservation" onclick="reservationRedirect()">Make Reservation</button>
 </div>
 
 </body>
@@ -89,7 +90,7 @@ var loggedUser = null;
 			url: "rest/reservations/all",
 			dataType: "json",
 			success: function(reservations) {
-				let dynamicHTML = "<thead><tr><th scope=\"col\">Apartment</th><th scope=\"col\">Start Date</th><th scope=\"col\">Number of nights</th>" +
+				let dynamicHTML = "<thead><tr><th scope=\"col\">Apartment Id</th><th scope=\"col\">Start Date</th><th scope=\"col\">Number of nights</th>" +
 				"<th scope=\"col\">Total Price</th><th scope=\"col\">Message</th><th scope=\"col\">Guest</th>" + 
 				"<th scope=\"col\">Status</th><tbody>";
 				
@@ -97,7 +98,7 @@ var loggedUser = null;
 					console.log(JSON.stringify(res));
 					dynamicHTML+="<tr>";
 					dynamicHTML+="<td scope=\"row\">";
-					dynamicHTML+=res.apartment.name;
+					dynamicHTML+=res.apartment.id;
 					dynamicHTML+="</td>";
 					dynamicHTML+="<td scope=\"row\">";
 					dynamicHTML+=res.startDate.dayOfMonth + "/" + res.startDate.monthValue + "/" + res.startDate.year;
@@ -120,20 +121,20 @@ var loggedUser = null;
 					if (loggedUser != null && loggedUser.role == "GUEST") {
 						if (res.status == "CREATED" || res.status == "ACCEPTED") {
 							dynamicHTML+="<td scope=\"row\">";
-							dynamicHTML+='<button onclick="changeStatus('+ res.id + ', &quot;WITHDRAWN&quot;)">Cancel Reservation</button>';
+							dynamicHTML+='<button class="btn btn-danger" onclick="changeStatus('+ res.id + ', &quot;WITHDRAWN&quot;)">Cancel Reservation</button>';
 							dynamicHTML+="</td>";
 						}
 					} else if (loggedUser != null && loggedUser.role == "HOST") {
 						if (res.status == "CREATED") {
 							dynamicHTML+="<td scope=\"row\">";
-							dynamicHTML+='<button onclick="changeStatus('+ res.id + ', &quot;ACCEPTED&quot;)">Accept Reservation</button>';
+							dynamicHTML+='<button class="btn btn-primary" onclick="changeStatus('+ res.id + ', &quot;ACCEPTED&quot;)">Accept Reservation</button>';
 							dynamicHTML+="</td>";
 							dynamicHTML+="<td scope=\"row\">";
-							dynamicHTML+='<button onclick="changeStatus('+ res.id + ', &quot;REJECTED&quot;)">Reject Reservation</button>';
+							dynamicHTML+='<button class="btn btn-danger" onclick="changeStatus('+ res.id + ', &quot;REJECTED&quot;)">Reject Reservation</button>';
 							dynamicHTML+="</td>";
 						} else if (res.status == "ACCEPTED") {
 							dynamicHTML+="<td scope=\"row\">";
-							dynamicHTML+='<button onclick="changeStatus('+ res.id + ', &quot;REJECTED&quot;)">Reject Reservation</button>';
+							dynamicHTML+='<button class="btn btn-danger" onclick="changeStatus('+ res.id + ', &quot;REJECTED&quot;)">Reject Reservation</button>';
 							dynamicHTML+="</td>";
 						}
 						// jos jedan if ako je prosao broj nocenja da moze da se se postavi status na FINISHED
@@ -177,6 +178,29 @@ var loggedUser = null;
 	
 	function reservationRedirect() {
 		window.location.replace("AddReservation.html");
+	}
+	
+	
+	function handleButtons() {
+		$.ajax({
+			type: "GET",
+			url: "rest/users/role",
+			dataType: "text",
+			success: function(role) {
+				if (role == "") {
+					$( ":button" ).hide();
+				} else if (role == "ADMIN") {
+					$( ":button" ).hide();
+				} else if (role == "HOST") {
+					$( ":button" ).show();
+				} else {
+					$( ":button" ).show();
+				}
+			},
+			error: function() {
+				alert("Something went wrong while getting logged user");
+			}
+		})
 	}
 
 
