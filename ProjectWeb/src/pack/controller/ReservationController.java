@@ -53,6 +53,11 @@ public class ReservationController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addReservation(ReservationDTO reservationDTO) {
 		Reservation newReservation = getReservationService().handleReservationDTO(reservationDTO, getApartmentService(), (Guest) request.getSession().getAttribute("user"));
+		
+		if (newReservation == null) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+		
 		newReservation = this.getReservationService().addReservation(newReservation);
 		this.getApartmentService().addReservationToApartment(newReservation);
 		this.getUserService().addReservationToGuest(newReservation);

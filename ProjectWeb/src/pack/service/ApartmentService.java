@@ -93,6 +93,15 @@ public class ApartmentService {
 	public boolean addReservationToApartment(Reservation reservation) {
 		Apartment apartment = apartmentDAO.getApartment(reservation.getApartment().getId());
 		apartment.getReservations().add(reservation);
+		
+		List<LocalDate> reservedDates = new ArrayList<LocalDate>();
+		
+		for (int i = 0; i < reservation.getNumberOfOvernightsStay() + 1; i++) {
+			reservedDates.add(reservation.getStartDate().plusDays(i));
+		}
+		
+		apartment.getAvailableDates().removeAll(reservedDates);
+		
 		return true;
 	}
 	

@@ -116,7 +116,20 @@ public class ReservationService {
 		
 		newReservation.setStartDate(LocalDate.parse(dto.getStartDate(), df));
 		
-		return newReservation;
+		
+		
+		List<LocalDate> reservedDates = new ArrayList<LocalDate>();
+		
+		for (int i = 1; i < newReservation.getNumberOfOvernightsStay() + 1; i++) {
+			reservedDates.add(newReservation.getStartDate().plusDays(i));
+		}
+		
+		if (apt.getAvailableDates().containsAll(reservedDates)) {
+			return newReservation;
+		} else {
+			return null;
+		}
+		
 		
 		
 	}
