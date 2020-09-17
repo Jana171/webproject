@@ -4,18 +4,18 @@
 		"startDate":"2020-08-26",
 		"numberOfOvernightsStay":0,
 		"totalPrice":50,
-		"messageWhenBooking":"No message",
-		"guest":"BoskoTheCat",
+		"messageWhenBooking":"Molim da mi pripremite rezervni punjac za telefon.",
+		"guest":"guest",
 		"status":"CREATED",
 		"id":1
 	},
 	{
 		"apartmentId":1,
-		"startDate":"2020-08-26",
+		"startDate":"2020-07-26",
 		"numberOfOvernightsStay":0,
 		"totalPrice":50,
-		"messageWhenBooking":"No message",
-		"guest":"BoskoTheCat",
+		"messageWhenBooking":"Molim da me sacekaju dva jastuka.",
+		"guest":"guest",
 		"status":"FINISHED",
 		"id":2
 	}

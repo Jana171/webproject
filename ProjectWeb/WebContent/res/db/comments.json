@@ -1,8 +1,8 @@
 [
 	{
-		"guest":"BoskoTheCat",
+		"guest":"guest",
 		"apartmentId":1,
-		"text":"Mjauuuu mjauuu",
+		"text":"Ovo je komentar gosta.",
 		"rate":3,
 		"deleted":false,
 		"selected":true

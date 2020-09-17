@@ -2,10 +2,10 @@
 
 		{
 
-			"username" : "DusanCZV",
-			"password" : "123",
-			"name" : "Dusan",
-			"lastname" : "Radjenovic",
+			"username" : "admin",
+			"password" : "admin",
+			"name" : "Admin",
+			"lastname" : "Admirovic",
 			"role" : "ADMIN",
 			"gender" : "MALE",
 			"deleted" : false
@@ -13,12 +13,12 @@
 
 		{
 
-			"username" : "JelenaDrkos",
-			"password" : "123",
-			"name" : "Jelena",
-			"lastname" : "Todorov",
+			"username" : "host",
+			"password" : "host",
+			"name" : "Petar",
+			"lastname" : "Petrovic",
 			"role" : "HOST",
-			"gender" : "FEMALE",
+			"gender" : "MALE",
 			"deleted" : false
 
 		},
@@ -27,12 +27,12 @@
 		
 		{
 
-			"username" : "BoskoTheCat",
-			"password" : "123",
-			"name" : "Bosko",
-			"lastname" : "Mjau",
+			"username" : "guest",
+			"password" : "guest",
+			"name" : "Tamara",
+			"lastname" : "Tamaric",
 			"role" : "GUEST",
-			"gender" : "MALE",
+			"gender" : "FEMALE",
 			"deleted" : false
 			
 		}
