@@ -35,7 +35,7 @@ public class ApartmentService {
 	public boolean addApartment(ApartmentDTO apartmentDTO, Host host, AmenityDAO amenityDAO) {
 		
 		Apartment apartment = new Apartment();
-		apartment.setActive(false);
+		apartment.setActive(true);
 		apartment.setHost(host);
 		apartment.setName(apartmentDTO.getName());
 		apartment.setLocation(apartmentDTO.getLocation());
