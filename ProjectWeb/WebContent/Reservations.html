@@ -56,6 +56,7 @@ var loggedUser = null;
 			dataType: "json",
 			success: function(logged) {
 				loggedUser = logged;
+				getReservations();
 			},
 			error: function() {
 				alert("Something went wrong while getting logged in user!");
@@ -64,6 +65,11 @@ var loggedUser = null;
 		
 		
 		
+
+	});
+
+
+	function getReservations() {
 		$.ajax({
 			type: "GET",
 			url: "rest/reservations/all",
@@ -129,7 +135,7 @@ var loggedUser = null;
 				$("#reservationsTable").append(dynamicHTML);
 			}
 		})
-	});
+	}
 	
 	
 	function changeStatus(id, status) {
