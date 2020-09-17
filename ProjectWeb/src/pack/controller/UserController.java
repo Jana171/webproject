@@ -204,52 +204,5 @@ public class UserController {
 		return userService;
 	}
 	
-	private AmenityService getAmenityService() {	
-		
-		AmenityService amenityService = (AmenityService) ctx.getAttribute("amenityService");
-		if (amenityService == null) {
-			amenityService = new AmenityService(ctx.getRealPath(""));
-			ctx.setAttribute("amenityService", amenityService);
-		}
-		
-		return amenityService;
-	}
-		
-	private ApartmentService getApartmentService() {	
-		
-		ApartmentService apartmentService = (ApartmentService) ctx.getAttribute("apartmentService");
-		if (apartmentService == null) {
-			apartmentService = new ApartmentService(ctx.getRealPath(""));
-			ctx.setAttribute("apartmentService", apartmentService);
-		}
-		
-		return apartmentService;
-	}
-	
-	@GET
-	@Path("/amenities")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Amenity> getAllAmenities() {
-		return this.getAmenityService().getAllAmenities();
-	}
-	
-	@POST
-	@Path("/amenities")
-	public boolean addAmenity(Amenity amenity) {
-		return this.getAmenityService().addAmenity(amenity);
-	}
-	
-	@PUT
-	@Path("/amenities")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Amenity updateAmenity(Amenity amenity) {
-		return this.getAmenityService().updateAmenity(amenity,getApartmentService().apartmentDAO);
-	}
-	
-	@DELETE
-	@Path("/amenities/{id}")
-	public boolean deleteAmenity(@PathParam("id") int id) {
-		return this.getAmenityService().deleteAmenity(id,getApartmentService().apartmentDAO);
-	}
-	
+
 }

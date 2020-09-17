@@ -12,12 +12,14 @@ function deleteAmenity(id) {
 	
 	$.ajax({
 		type: "DELETE",
-		url: "rest/users/amenities/" + id,
+		url: "rest/amenities/" + id,
 		success: function() {
 			alert("Amenity deleted!");
+			window.location.reload();
 		},
 		error: function() {
 			alert("Something went wrong while deleting amenity!");
+			window.location.reload();
 		}
 	})
 }
@@ -30,14 +32,16 @@ function addAmenity() {
 	
 	$.ajax({
 		type: "POST",
-		url: "rest/users/amenities",
+		url: "rest/amenities",
 		data: JSON.stringify(amenity),
 		contentType: "application/json",
 		success: function() {
 			alert("New amenity added!");
+			window.location.reload();
 		},
 		error: function() {
 			alert("Something went wrong while adding new amenity!");
+			window.location.reload();
 		}
 	})
 };

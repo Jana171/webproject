@@ -29,8 +29,8 @@ function load() {
 		console.log(data);
 		let dynamicHTML = "<<thead><tr><th scope=\"col\">Id</th><th scope=\"col\">Name</th><th scope=\"col\">Type</th>" +
 				"<th scope=\"col\">Number of Rooms</th><th scope=\"col\">Number of guests</th><th scope=\"col\">Price for night</th>" + 
-				"<th scope=\"col\">Time for check in</th><th scope=\"col\">Time for check out</th><th scope=\"col\">Location</th>"+ 
-				"<th class=\"variant1\">Go to profile</th><th class=\"variant2\">Delete</th></tr></thead><tbody>";
+				"<th scope=\"col\">Time for check in</th><th scope=\"col\">Time for check out</th><th scope=\"col\">Location</th><th scope=\"col\">Amenities</th>"+  
+				"</thead><tbody>";
 				
 				
 	    let i;
@@ -63,12 +63,20 @@ function load() {
 			dynamicHTML+="<td>";
 			dynamicHTML+= data[i].location.address.city + " " + data[i].location.address.street;
 			dynamicHTML+="</td>";
+			var amTemp = "";
+			for(k = 0 ; k < data[i].amenities.length; k++){
+				amTemp += data[i].amenities[k].title + ", ";
+			}
+			dynamicHTML+="<td>";
+			dynamicHTML+= amTemp;
+			dynamicHTML+="</td>";
 			dynamicHTML+="<td><a href=\"UpdateApartment.html?id=" + data[i].id + "\" >Update</a></td>";
 			dynamicHTML+="<td><a href=\"Apartment.html?id=" + data[i].id + "\" >Profile</a></td>";
 			dynamicHTML+="<td><button onclick=\"deleteApartment(" + data[i].id + ")\">Delete<button></td>";
 			
 			
 			dynamicHTML+="</tr>";
+			
 		}
 		
 		dynamicHTML+="</tbody>";

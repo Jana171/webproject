@@ -143,6 +143,7 @@ var loggedUser = null;
 			url: "rest/reservations",
 			data: JSON.stringify(reservation),
 			contentType: "application/json",
+			dateType: "json",
 			success: function() {
 				alert("Reservation updated!");
 				window.location.reload();
