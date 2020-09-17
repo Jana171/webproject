@@ -99,7 +99,7 @@ public class UserService {
 	
 	public boolean addReservationToGuest(Reservation reservation) {
 		Guest guest = (Guest) userDAO.getUser(reservation.getGuest().getUsername());
-		guest.getReservations().add(reservation);
+		guest.getReservations().add(reservation.getId());
 		return true;
 	}
 	

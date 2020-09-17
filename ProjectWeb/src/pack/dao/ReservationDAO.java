@@ -31,6 +31,19 @@ public class ReservationDAO {
 	
 	//refaktorisi posebna metoda za json obj pa izdvoj save u posebnu a add kao poziv te 2
 	
+	public List<Long> getGuestReservationIds(String username) {
+		List<Long> retVal = new ArrayList<Long>();
+		
+		for (Reservation r : ReservationDAO.reservations) {
+			if (r.getGuest().getUsername().equals(username)) {
+				retVal.add(r.getId());
+			}
+		}
+		
+		return retVal;
+	}
+	
+	
 	public List<Reservation> getGuestReservations(String username) {
 		List<Reservation> retVal = new ArrayList<Reservation>();
 		
@@ -98,7 +111,7 @@ public class ReservationDAO {
 			}
 			
 			
-			reservationJSON.put("startDate", reservation.getStartDate());
+			reservationJSON.put("startDate", reservation.getStartDate().toString());
 			reservationJSON.put("guest", reservation.getGuest().getUsername());
 			reservationJSON.put("apartmentId",reservation.getApartment().getId());
 			reservationJSON.put("status", reservation.getStatus().toString());
@@ -110,15 +123,6 @@ public class ReservationDAO {
 			//Random random = new Random();
 			//int id = random.nextInt();
 	
-			int flag = -1;
-			for (int i=0; i< reservations.size(); i++) {
-				if(reservations.get(i).getId() == reservation.getId()) {
-					flag = i;
-				}
-			}
-			if(flag != -1) {
-				reservations.remove(flag);
-			}
 			reservations.add(reservation);
 			reservationsArray.add(reservationJSON);
 
@@ -160,7 +164,7 @@ public class ReservationDAO {
 			}
 			
 			
-			reservationJSON.put("startDate", reservation.getStartDate());
+			reservationJSON.put("startDate", reservation.getStartDate().toString());
 			reservationJSON.put("guest", reservation.getGuest().getUsername());
 			reservationJSON.put("apartmentId",reservation.getApartment().getId());
 			reservationJSON.put("status", reservation.getStatus().toString());
@@ -204,15 +208,15 @@ public class ReservationDAO {
 		Reservation r = this.getReservation(reservation.getId());
 		r.setStatus(reservation.getStatus());
 		
-		for(User user : userDAO.getAllUsers()) {
-			if(user.getRole() == Role.GUEST) {
-				for(Reservation res: ((Guest)user).getReservations()) {
-					if(res.getId() == reservation.getId()) {
-						res.setStatus(reservation.getStatus());
-					}
-				}
-			}
-		}
+//		for(User user : userDAO.getAllUsers()) {
+//			if(user.getRole() == Role.GUEST) {
+//				for(Reservation res: ((Guest)user).getReservations()) {
+//					if(res.getId() == reservation.getId()) {
+//						res.setStatus(reservation.getStatus());
+//					}
+//				}
+//			}
+//		}
 		
 		for(Apartment ap : apartmentDAO.getAllApartments()) {
 			if(ap.getId() == r.getApartment().getId()) {
@@ -242,7 +246,7 @@ public class ReservationDAO {
 		for(User user : userDAO.getAllUsers()) {
 			if(user.getRole() == Role.GUEST) {
 				for(int i = 0 ; i < ((Guest)user).getReservations().size();i++ ) {
-					if(((Guest)user).getReservations().get(i).getId() == id) {
+					if(((Guest)user).getReservations().get(i) == id) {
 						((Guest)user).getReservations().remove(i);
 					}
 				}
@@ -264,6 +268,7 @@ public class ReservationDAO {
 		JSONParser jsonParser = new JSONParser();
 		String fullPath = path + "/res/db/reservations.json";
 		System.out.println("Prava putanja ucitavanja: " + fullPath);
+		this.reservations.clear();
 		try {
 			System.out.println(fullPath);
 			JSONArray reservations = (JSONArray) jsonParser.parse(new FileReader(fullPath));	

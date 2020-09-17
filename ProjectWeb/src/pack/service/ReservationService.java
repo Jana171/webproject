@@ -1,11 +1,14 @@
 package pack.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import pack.dao.ApartmentDAO;
 import pack.dao.ReservationDAO;
 import pack.dao.UserDAO;
+import pack.dto.ReservationDTO;
 import pack.enums.ReservationStatus;
 import pack.enums.Role;
 import pack.model.Apartment;
@@ -47,12 +50,19 @@ public class ReservationService {
 	
 	public List<Reservation> getAllReservations(User user) {
 		if(user.getRole() == Role.GUEST) {
-			return ((Guest)user).getReservations();
+			return this.reservationDAO.getGuestReservations(user.getUsername());
+			
+			//return ((Guest)user).getReservations();
 		} else if(user.getRole() == Role.HOST) {
 			List<Apartment> apartments = ((Host)user).getApartmentsToRent();
 			List<Reservation> reservationsOfAllApartments = new ArrayList<Reservation>();
 			for(Apartment a : apartments) {
-				reservationsOfAllApartments.addAll(a.getReservations());
+				for (Reservation r : reservationDAO.getAllReservations()) {
+					if (a.getId() == r.getApartment().getId()) {
+						reservationsOfAllApartments.add(r);
+					}
+				}
+				//reservationsOfAllApartments.addAll(a.getReservations());
 			}
 			return reservationsOfAllApartments;
 		} else {
@@ -90,18 +100,21 @@ public class ReservationService {
 	}
 	
 	
-	public Reservation handleReservationDTO(Reservation dto, ApartmentService aptService, Guest guest) {
+	public Reservation handleReservationDTO(ReservationDTO dto, ApartmentService aptService, Guest guest) {
 		Reservation newReservation = new Reservation();
 		newReservation.setStatus(ReservationStatus.CREATED);
 		newReservation.setGuest(guest);
 		
-		Apartment apt = aptService.getApartment(dto.getApartment().getId().intValue());
+		Apartment apt = aptService.getApartment(dto.getApartmentId().intValue());
 		newReservation.setApartment(apt);
 		newReservation.setTotalPrice(dto.getNumberOfOvernightsStay() * apt.getPriceForNight());
 		
 		newReservation.setMessageWhenBooking(dto.getMessageWhenBooking());
 		newReservation.setNumberOfOvernightsStay(dto.getNumberOfOvernightsStay());
-		newReservation.setStartDate(dto.getStartDate());
+		
+		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-M-dd");
+		
+		newReservation.setStartDate(LocalDate.parse(dto.getStartDate(), df));
 		
 		return newReservation;
 		

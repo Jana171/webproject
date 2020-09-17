@@ -108,7 +108,7 @@
 				var options = "";
 				$.each(apt.availableDates, function(i, dat) {
 					var option = "";
-					option += '<option value="' + dat + '">' + dat.dayOfMonth + "/" + dat.monthValue + "/" + dat.year + '</option>';
+					option += '<option value="' + dat.year + '-' + dat.monthValue + '-' + dat.dayOfMonth + '">' + dat.dayOfMonth + "/" + dat.monthValue + "/" + dat.year + '</option>';
 					options += option;
 				})
 				$("#availableDates").empty();
@@ -122,11 +122,10 @@
 	
 	function makeReservation() {
 		var reservation = {};
-		var apartment = {};
-		apartment.id = $("#apartments").val();
-		reservation.apartment = apartment;
+
+		reservation.apartmentId = parseInt($("#apartments").val());
 		reservation.startDate = $("#availableDates").val();
-		reservation.numberOfOvernightsStay = $("#numberOfNights").val();
+		reservation.numberOfOvernightsStay = parseInt($("#numberOfNights").val());
 		reservation.messageWhenBooking = $("#message").val();
 		
 		if (reservation.apartment == "" || reservation.startDate == "" || reservation.numberOfOvernightsStay == "") {

@@ -3,7 +3,7 @@ package pack.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import pack.enums.Gender;
 import pack.enums.Role;
@@ -13,8 +13,8 @@ public class Guest extends User{
 	
 	private List<Apartment> rentedApartments = new ArrayList<Apartment>();
 	
-	@JsonBackReference
-	private List<Reservation> reservations = new ArrayList<Reservation>();
+	
+	private List<Long> reservations = new ArrayList<Long>();
 	
 	public Guest() {}
 	
@@ -31,11 +31,11 @@ public class Guest extends User{
 		this.rentedApartments = rentedApartments;
 	}
 
-	public List<Reservation> getReservations() {
+	public List<Long> getReservations() {
 		return reservations;
 	}
 
-	public void setReservations(List<Reservation> reservations) {
+	public void setReservations(List<Long> reservations) {
 		this.reservations = reservations;
 	}
 	

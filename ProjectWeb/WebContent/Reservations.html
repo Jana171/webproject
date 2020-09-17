@@ -35,7 +35,7 @@
   </div>
 </nav>
 
-<button id="makeReservation" onclick="makeReservation()">Add Apartment</button>
+<button id="makeReservation" onclick="reservationRedirect()">Make Reservation</button>
 <table id="reservationsTable"></table>
 
 </body>
@@ -149,7 +149,7 @@ var loggedUser = null;
 			url: "rest/reservations",
 			data: JSON.stringify(reservation),
 			contentType: "application/json",
-			dateType: "json",
+			dataType: "json",
 			success: function() {
 				alert("Reservation updated!");
 				window.location.reload();
@@ -160,6 +160,10 @@ var loggedUser = null;
 			}
 		});
 	};
+	
+	function reservationRedirect() {
+		window.location.replace("AddReservation.html");
+	}
 
 
 </script>

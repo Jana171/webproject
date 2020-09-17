@@ -16,8 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import pack.enums.ReservationStatus;
-import pack.model.Apartment;
+import pack.dto.ReservationDTO;
 import pack.model.Comment;
 import pack.model.Guest;
 import pack.model.Reservation;
@@ -52,8 +51,8 @@ public class ReservationController {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addReservation(Reservation reservation) {
-		Reservation newReservation = getReservationService().handleReservationDTO(reservation, getApartmentService(), (Guest) request.getSession().getAttribute("user"));
+	public Response addReservation(ReservationDTO reservationDTO) {
+		Reservation newReservation = getReservationService().handleReservationDTO(reservationDTO, getApartmentService(), (Guest) request.getSession().getAttribute("user"));
 		newReservation = this.getReservationService().addReservation(newReservation);
 		this.getApartmentService().addReservationToApartment(newReservation);
 		this.getUserService().addReservationToGuest(newReservation);

@@ -137,7 +137,7 @@ public class UserDAO {
 					
 				} else if (role == Role.GUEST) {
 					Guest guest = new Guest(username,password,name,lastname,gender,role);
-					guest.setReservations(this.reservationDAO.getGuestReservations(username));
+					guest.setReservations(this.reservationDAO.getGuestReservationIds(username));
 					List<Long> apartmentWithIds = this.reservationDAO.getGuestRentedApartmentsIds(username);
 					guest.setRentedApartments(apartmentDAO.getGuestRentedApartmentsByIds(apartmentWithIds));
 					this.users.add(guest);

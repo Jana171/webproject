@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import pack.dto.ApartmentDTO;
 import pack.enums.ApartmentType;
@@ -22,13 +22,18 @@ public class Apartment {
 	private boolean active;		//predstavlja status
 	
 	private Location location;
-	@JsonManagedReference
+	//@JsonManagedReference
+	//@JsonBackReference
+	@JsonIgnore
 	private Host host;
 	
 	private List<LocalDate> datesForRent = new ArrayList<LocalDate>();
 	private List<LocalDate> availableDates = new ArrayList<LocalDate>();
 	private List<Comment> comments = new ArrayList<Comment>();
 	private List<Amenity> amenities = new ArrayList<Amenity>();
+	
+	//@JsonBackReference
+	@JsonIgnore
 	private List<Reservation> reservations = new ArrayList<Reservation>();
 
 	// verovatno ce biti putanje do slika na serveru, izmeniti ako to ne bude slucaj
