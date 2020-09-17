@@ -70,11 +70,8 @@ function load() {
 			dynamicHTML+="<td>";
 			dynamicHTML+= amTemp;
 			dynamicHTML+="</td>";
-			dynamicHTML+="<td><a href=\"UpdateApartment.html?id=" + data[i].id + "\" >Update</a></td>";
-			dynamicHTML+="<td><a href=\"Apartment.html?id=" + data[i].id + "\" >Profile</a></td>";
-			dynamicHTML+="<td><button onclick=\"deleteApartment(" + data[i].id + ")\">Delete<button></td>";
-			
-			
+			dynamicHTML+="<td><button class=\"btn btn-primary\" onclick=\"apartmentView(" + data[i].id + ")\" >View/Update</td>";
+			dynamicHTML+="<td><button class=\"btn btn-danger\" onclick=\"deleteApartment(" + data[i].id + ")\">Delete</td>";
 			dynamicHTML+="</tr>";
 			
 		}
@@ -85,6 +82,11 @@ function load() {
 	});
 		
 }
+
+function apartmentView(id) {
+	window.location.replace("UpdateApartment.html?id=" + id);
+}
+
 
 function redirectToAdd() {
 	window.location.replace("AddApartment.html");
