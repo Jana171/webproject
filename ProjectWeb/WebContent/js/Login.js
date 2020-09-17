@@ -14,7 +14,6 @@ $("#loginButton").click(function(){
     	}).success(function(data) {
     		
     		alert("Successfull login!");
-    		//window.location.href = "http://localhost:8080/ProjectWeb/Home.html";
     		window.location.replace("Home.html");
     	}).error(function() {
     		alert("Bad Credentials!");
