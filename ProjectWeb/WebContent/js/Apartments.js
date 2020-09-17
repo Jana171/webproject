@@ -76,12 +76,20 @@ function handleButtons() {
 		success: function(role) {
 			if (role == "") {
 				$( ":button" ).hide();
+				$("#filter-btn").show();
+				$("#search-filter-btn").show();
 			} else if (role == "ADMIN") {
 				$( ":button" ).show();
+				$("#filter-btn").show();
+				$("#search-filter-btn").show();
 			} else if (role == "HOST") {
 				$( ":button" ).show();
+				$("#filter-btn").show();
+				$("#search-filter-btn").show();
 			} else {
 				$( ":button" ).hide();
+				$("#filter-btn").show();
+				$("#search-filter-btn").show();
 			}
 		},
 		error: function() {
