@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -18,6 +17,7 @@ import pack.model.Apartment;
 import pack.model.Guest;
 import pack.model.Reservation;
 import pack.model.User;
+import pack.service.UserService;
 
 public class ReservationDAO {
 	
@@ -80,8 +80,71 @@ public class ReservationDAO {
 		return reservations;
 	}
 	
+	
 	@SuppressWarnings("unchecked")
-	public void addReservation(Reservation reservation) {
+	public Reservation addReservation(Reservation reservation) {
+		JSONParser jsonParser = new JSONParser();
+		String fullPath = path + "/res/db/reservations.json";
+		try {
+			
+			JSONArray reservationsArray = (JSONArray) jsonParser.parse(new FileReader(fullPath));	
+			
+			JSONObject reservationJSON = new JSONObject();
+			
+			
+			if(reservation.getId() == null) {
+				int newId = reservations.size() + 1;
+				reservation.setId((long) newId);
+			}
+			
+			
+			reservationJSON.put("startDate", reservation.getStartDate());
+			reservationJSON.put("guest", reservation.getGuest().getUsername());
+			reservationJSON.put("apartmentId",reservation.getApartment().getId());
+			reservationJSON.put("status", reservation.getStatus().toString());
+			reservationJSON.put("messageWhenBooking", reservation.getMessageWhenBooking());
+			reservationJSON.put("totalPrice",reservation.getTotalPrice());
+			reservationJSON.put("numberOfOvernightsStay",reservation.getNumberOfOvernightsStay());
+			reservationJSON.put("id",reservation.getId());
+			
+			//Random random = new Random();
+			//int id = random.nextInt();
+	
+			int flag = -1;
+			for (int i=0; i< reservations.size(); i++) {
+				if(reservations.get(i).getId() == reservation.getId()) {
+					flag = i;
+				}
+			}
+			if(flag != -1) {
+				reservations.remove(flag);
+			}
+			reservations.add(reservation);
+			reservationsArray.add(reservationJSON);
+
+			FileWriter file = new FileWriter(fullPath);
+            file.write(reservationsArray.toJSONString());
+            file.close();
+            
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("Nije nasao fajl");
+			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Parse exception!");
+			e.printStackTrace();
+		}
+		return reservation;
+		
+	}
+
+	
+	
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	public void changeReservation(Reservation reservation) {
 		JSONParser jsonParser = new JSONParser();
 		String fullPath = path + "/res/db/reservations.json";
 		try {
@@ -160,7 +223,7 @@ public class ReservationDAO {
 				}
 			}
 		}
-		addReservation(r);
+		changeReservation(r);
 		return r;
 	}
 	
@@ -217,6 +280,7 @@ public class ReservationDAO {
 				Guest guest = new Guest();
 				guest.setUsername(guestUusername);
 				
+				UserService us = new UserService();
 				
 				
 				String statusStr = (String) reservationJSON.get("status");

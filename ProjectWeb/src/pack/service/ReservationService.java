@@ -61,8 +61,8 @@ public class ReservationService {
 		
 	}
 	
-	public void addReservation(Reservation reservation) {
-		this.reservationDAO.addReservation(reservation);
+	public Reservation addReservation(Reservation reservation) {
+		return this.reservationDAO.addReservation(reservation);
 	}
 	
 	public boolean checkIfPossibleToLeaveComment(Long reservationId) {
@@ -89,6 +89,24 @@ public class ReservationService {
 		return this.reservationDAO.deleteReservation(id, userDAO, apartmentDAO);
 	}
 	
+	
+	public Reservation handleReservationDTO(Reservation dto, ApartmentService aptService, Guest guest) {
+		Reservation newReservation = new Reservation();
+		newReservation.setStatus(ReservationStatus.CREATED);
+		newReservation.setGuest(guest);
+		
+		Apartment apt = aptService.getApartment(dto.getApartment().getId().intValue());
+		newReservation.setApartment(apt);
+		newReservation.setTotalPrice(dto.getNumberOfOvernightsStay() * apt.getPriceForNight());
+		
+		newReservation.setMessageWhenBooking(dto.getMessageWhenBooking());
+		newReservation.setNumberOfOvernightsStay(dto.getNumberOfOvernightsStay());
+		newReservation.setStartDate(dto.getStartDate());
+		
+		return newReservation;
+		
+		
+	}
 	
 	
 	

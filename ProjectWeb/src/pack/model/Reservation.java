@@ -2,6 +2,8 @@ package pack.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import pack.enums.ReservationStatus;
 
 public class Reservation {
@@ -11,6 +13,8 @@ public class Reservation {
 	private int numberOfOvernightsStay = 1;
 	private int totalPrice;
 	private String messageWhenBooking;
+	
+	@JsonManagedReference
 	private Guest guest;
 	private ReservationStatus status;
 	private Long id;

@@ -14,9 +14,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import pack.enums.ReservationStatus;
 import pack.model.Apartment;
 import pack.model.Comment;
+import pack.model.Guest;
 import pack.model.Reservation;
 import pack.model.User;
 import pack.service.ApartmentService;
@@ -49,13 +52,13 @@ public class ReservationController {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_HTML)
-	public String addReservation(Reservation reservation) {
-		//(User)request.getSession().getAttribute("user")
-		this.getReservationService().addReservation(reservation);
-		this.getApartmentService().addReservationToApartment(reservation);
-		this.getUserService().addReservationToGuest(reservation);
-		return "<h3>Successfull!</h3>";
+	public Response addReservation(Reservation reservation) {
+		Reservation newReservation = getReservationService().handleReservationDTO(reservation, getApartmentService(), (Guest) request.getSession().getAttribute("user"));
+		newReservation = this.getReservationService().addReservation(newReservation);
+		this.getApartmentService().addReservationToApartment(newReservation);
+		this.getUserService().addReservationToGuest(newReservation);
+		
+		return Response.ok().build();
 	}
 	
 	@PUT
