@@ -2,7 +2,7 @@
 	{
 		"apartmentId":1,
 		"startDate":"2020-08-26",
-		"numberOfOvernightsStay":0,
+		"numberOfOvernightsStay":1,
 		"totalPrice":50,
 		"messageWhenBooking":"Molim da mi pripremite rezervni punjac za telefon.",
 		"guest":"guest",
@@ -12,7 +12,7 @@
 	{
 		"apartmentId":1,
 		"startDate":"2020-07-26",
-		"numberOfOvernightsStay":0,
+		"numberOfOvernightsStay":2,
 		"totalPrice":50,
 		"messageWhenBooking":"Molim da me sacekaju dva jastuka.",
 		"guest":"guest",
