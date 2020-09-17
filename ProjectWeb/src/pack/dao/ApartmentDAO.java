@@ -70,8 +70,7 @@ public class ApartmentDAO {
 	
 	
 	public boolean addApartment(Apartment apartment) {
-		Random random = new Random();
-		int id = random.nextInt();
+		int id = apartments.size() + 1;
 		apartment.setId((long) id);
 		apartments.add(apartment);
 		this.saveApartment(apartment);
